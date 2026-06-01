@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Contact Luke Johnson for media inquiries, speaking opportunities, interviews, and article opportunities.">
+  <title>Contact | Luke Johnson</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark">LJ</span><span>Luke Johnson</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation"><span></span><span></span><span></span><span class="sr-only">Menu</span></button>
+    <nav id="site-navigation" class="site-nav" aria-label="Primary navigation">
+      <a class="nav-link" href="index.html">Home</a>
+      <a class="nav-link" href="archive.html">Archive</a>
+      <a class="nav-link" href="books.html">Books</a>
+      <a class="nav-link" href="publications.html">Publications</a>
+      <a class="nav-link" href="about.html">About</a>
+      <a class="nav-link" href="contact.html">Contact</a>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="page-hero">
+      <p class="eyebrow">Contact</p>
+      <h1>Media, speaking, book, interview, and article inquiries.</h1>
+      <p>Use the form below to prepare an inquiry. A form handler can be connected later without redesigning this page.</p>
+    </section>
+
+    <section class="section-pad contact-layout">
+      <div class="contact-reasons" aria-label="Contact reasons">
+        <h2>Inquiry Types</h2>
+        <ul>
+          <li>Media inquiries</li>
+          <li>Speaking opportunities</li>
+          <li>Book questions</li>
+          <li>Interview requests</li>
+          <li>Article opportunities</li>
+        </ul>
+        <img src="assets/images/02-luke-johnson-author-photo.jpg.jpg" alt="Professional author portrait of Luke Johnson">
+      </div>
+      <form class="contact-form" action="#" method="post">
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="subject">Subject</label>
+          <input id="subject" name="subject" type="text" required>
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="7" required></textarea>
+        </div>
+        <button class="button" type="submit">Send Message</button>
+        <p class="form-note">This static form is ready for a future form handler.</p>
+      </form>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 Luke Johnson.</p>
+    <a href="contact.html">Media, speaking, and interview inquiries</a>
+  </footer>
+  <script src="assets/js/archiveData.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
