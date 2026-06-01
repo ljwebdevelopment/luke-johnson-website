@@ -233,6 +233,60 @@
     });
   }
 
+  function setupContactForm() {
+    const form = qs("[data-contact-form]");
+    if (!form) return;
+
+    const status = qs("[data-form-status]", form);
+    const submitButton = qs("button[type='submit']", form);
+    const successMessage = "Thank you for reaching out. Your message has been received and I will respond as soon as possible.";
+    const errorMessage = "There was a problem submitting your message. Please try again later.";
+
+    function setStatus(message, type) {
+      if (!status) return;
+      status.textContent = message;
+      status.dataset.status = type;
+      status.setAttribute("role", type === "error" ? "alert" : "status");
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const endpoint = window.contactFormConfig && window.contactFormConfig.googleAppsScriptUrl;
+      if (!endpoint) {
+        setStatus(errorMessage, "error");
+        console.warn("Google Apps Script URL is missing. Add it in assets/js/contactConfig.js.");
+        return;
+      }
+
+      const formData = new FormData(form);
+      formData.set("timestamp", new Date().toISOString());
+      formData.set("sourcePage", window.location.href);
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Sending...";
+      }
+
+      try {
+        await fetch(endpoint, {
+          method: "POST",
+          mode: "no-cors",
+          body: formData
+        });
+        form.reset();
+        setStatus(successMessage, "success");
+      } catch (error) {
+        setStatus(errorMessage, "error");
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.textContent = "Send Message";
+        }
+      }
+    });
+  }
+
   function markCurrentPage() {
     const current = window.location.pathname.split("/").pop() || "index.html";
     qsa(".nav-link").forEach((link) => {
@@ -248,5 +302,6 @@
     renderArchive();
     renderBooks();
     renderPublications();
+    setupContactForm();
   });
 })();

@@ -44,6 +44,7 @@ a {
 
 button,
 input,
+select,
 textarea {
   font: inherit;
 }
@@ -790,12 +791,17 @@ h3 {
 }
 
 .field input,
+.field select,
 .field textarea {
   width: 100%;
   padding: 0.82rem 0.9rem;
   border: 1px solid var(--line);
   background: var(--ivory);
   color: var(--charcoal);
+}
+
+.field select {
+  min-height: 50px;
 }
 
 .field textarea {
@@ -805,6 +811,22 @@ h3 {
 .form-note {
   color: var(--muted);
   font-size: 0.85rem;
+}
+
+.form-note[data-status="success"] {
+  color: #215c32;
+  font-weight: 800;
+}
+
+.form-note[data-status="error"] {
+  color: var(--burgundy);
+  font-weight: 800;
+}
+
+.button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+  transform: none;
 }
 
 .site-footer {

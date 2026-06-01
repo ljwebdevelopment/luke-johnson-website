@@ -43,7 +43,7 @@
         </ul>
         <img src="assets/images/02-luke-johnson-author-photo.jpg.jpg" alt="Professional author portrait of Luke Johnson">
       </div>
-      <form class="contact-form" action="#" method="post">
+      <form class="contact-form" action="#" method="post" data-contact-form>
         <div class="field">
           <label for="name">Name</label>
           <input id="name" name="name" type="text" autocomplete="name" required>
@@ -57,11 +57,21 @@
           <input id="subject" name="subject" type="text" required>
         </div>
         <div class="field">
+          <label for="inquiry-type">Inquiry Type</label>
+          <select id="inquiry-type" name="inquiryType">
+            <option value="Media inquiry">Media inquiry</option>
+            <option value="Speaking opportunity">Speaking opportunity</option>
+            <option value="Book question">Book question</option>
+            <option value="Interview request">Interview request</option>
+            <option value="Article opportunity">Article opportunity</option>
+          </select>
+        </div>
+        <div class="field">
           <label for="message">Message</label>
           <textarea id="message" name="message" rows="7" required></textarea>
         </div>
         <button class="button" type="submit">Send Message</button>
-        <p class="form-note">This static form is ready for a future form handler.</p>
+        <p class="form-note" data-form-status>Messages are sent securely to the contact spreadsheet.</p>
       </form>
     </section>
   </main>
@@ -69,6 +79,7 @@
     <p>&copy; 2026 Luke Johnson.</p>
     <a href="contact.html">Media, speaking, and interview inquiries</a>
   </footer>
+  <script src="assets/js/contactConfig.js"></script>
   <script src="assets/js/archiveData.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
