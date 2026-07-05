@@ -221,6 +221,31 @@
     });
   }
 
+  function createPublicationLogoCell(pub) {
+    const cell = document.createElement(pub.website ? "a" : "div");
+    cell.className = "logo-cell";
+    if (pub.website) {
+      cell.href = pub.website;
+      cell.target = "_blank";
+      cell.rel = "noopener";
+    }
+    const mark = pub.faviconUrl
+      ? `<img src="${pub.faviconUrl}" alt="" loading="lazy" onerror="this.remove(); this.parentElement.textContent='${initials(pub.name)}';">`
+      : initials(pub.name);
+    cell.innerHTML = `
+      <span class="logo-mark" aria-hidden="true">${mark}</span>
+      <span class="logo-name">${pub.name}<span class="logo-loc">${pub.location}</span></span>
+    `;
+    return cell;
+  }
+
+  function renderPublicationLogos() {
+    qsa("[data-publications-logos]").forEach((grid) => {
+      const limit = Number(grid.dataset.limit || (data.publications || []).length);
+      (data.publications || []).slice(0, limit).forEach((pub) => grid.appendChild(createPublicationLogoCell(pub)));
+    });
+  }
+
   function setupNavigation() {
     const toggle = qs(".nav-toggle");
     const nav = qs("#site-navigation");
@@ -287,6 +312,88 @@
     });
   }
 
+  function setupNewsletter() {
+    const form = qs("[data-newsletter]");
+    if (!form) return;
+    const status = qs("[data-newsletter-status]");
+    const input = qs("input[type='email']", form);
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const value = (input && input.value ? input.value : "").trim();
+      const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      if (!status) return;
+      if (!valid) {
+        status.textContent = "Please enter a valid email address.";
+        status.dataset.status = "error";
+        if (input) input.focus();
+        return;
+      }
+      status.textContent = "Thanks! Email updates aren't automated yet — for now, reach Luke through the contact page and he'll add you.";
+      status.dataset.status = "success";
+      form.reset();
+    });
+  }
+
+  const prefersReducedMotion = window.matchMedia
+    ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    : false;
+
+  function setupReveal() {
+    const items = qsa(".reveal");
+    if (!items.length) return;
+    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+      items.forEach((el) => el.classList.add("is-visible"));
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.14, rootMargin: "0px 0px -40px 0px" }
+    );
+    items.forEach((el) => observer.observe(el));
+  }
+
+  function animateCount(node) {
+    const target = parseInt(node.textContent, 10);
+    if (!Number.isFinite(target) || prefersReducedMotion) return;
+    const duration = 1100;
+    const start = performance.now();
+    node.textContent = "0";
+    function step(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      node.textContent = String(Math.round(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+      else node.textContent = String(target);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function setupCounters() {
+    const nodes = qsa("[data-count]");
+    if (!nodes.length) return;
+    if (prefersReducedMotion || !("IntersectionObserver" in window)) return;
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCount(entry.target);
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+    nodes.forEach((node) => observer.observe(node));
+  }
+
   function markCurrentPage() {
     const current = window.location.pathname.split("/").pop() || "index.html";
     qsa(".nav-link").forEach((link) => {
@@ -302,6 +409,10 @@
     renderArchive();
     renderBooks();
     renderPublications();
+    renderPublicationLogos();
     setupContactForm();
+    setupNewsletter();
+    setupReveal();
+    setupCounters();
   });
 })();
