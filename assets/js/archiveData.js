@@ -8,13 +8,23 @@ window.siteData = {
   },
   books: [
     {
+      title: "Dead Air America",
+      year: "Upcoming book",
+      comingSoon: true,
+      coverImage: "assets/images/dead-air-america-cover-web.jpg",
+      backCoverImage: "",
+      description: "Luke Johnson's upcoming nonfiction book about growing up in a country where trust in institutions — media, politics, education, and technology — already feels fractured. Written from the perspective of a young American watching these systems shape his generation in real time, it explores the noise, pressure, and confusion of modern life while asking what it means to find a voice in a country that often feels like it has stopped listening.",
+      amazonLink: "",
+      learnMoreLink: ""
+    },
+    {
       title: "Becoming You: Advice From a Teenager",
       year: "Published book",
       coverImage: "https://m.media-amazon.com/images/I/31kKRNuwR6L._SY445_SX342_FMwebp_.jpg",
       backCoverImage: "https://m.media-amazon.com/images/I/61GrgHSCDnL._SY522_.jpg",
       description: "A personal and honest book written from a teen perspective about identity, growth, and becoming yourself.",
-      amazonLink: "#",
-      learnMoreLink: "#"
+      amazonLink: "https://a.co/d/0h8d18YT",
+      learnMoreLink: ""
     },
     {
       title: "We're All The Same",
@@ -22,8 +32,8 @@ window.siteData = {
       coverImage: "https://m.media-amazon.com/images/I/31EwLFnEHIL._SY445_SX342_FMwebp_.jpg",
       backCoverImage: "https://m.media-amazon.com/images/I/61LHBcn6OCL._SY522_.jpg",
       description: "A book focused on autism awareness, empathy, and the idea that every person deserves understanding and inclusion.",
-      amazonLink: "#",
-      learnMoreLink: "#"
+      amazonLink: "https://a.co/d/0cCjZ2Nl",
+      learnMoreLink: ""
     }
   ],
   publications: [

@@ -112,17 +112,24 @@
       ? `<figure class="book-cover-side"><img src="${book.backCoverImage}" alt="Back cover of ${book.title}" loading="lazy"><figcaption>Back</figcaption></figure>`
       : "";
 
+    const amazonButton = book.amazonLink
+      ? `<a class="button button-small" href="${book.amazonLink}" target="_blank" rel="noopener">Buy on Amazon</a>`
+      : "";
+    const learnMoreButton = book.learnMoreLink
+      ? `<a class="button button-small button-outline" href="${book.learnMoreLink}">Learn More</a>`
+      : "";
+    const actions = book.comingSoon
+      ? `<span class="coming-soon">Coming Soon</span>`
+      : `<div class="button-row">${amazonButton}${learnMoreButton}</div>`;
+
     article.innerHTML = `
-      <div class="book-cover" data-cover-count="${Number(Boolean(frontCover)) + Number(Boolean(backCover))}">${frontCover}${backCover || `<figure class="book-cover-side"><div class="book-placeholder" aria-hidden="true"><span>${index + 1}</span><strong>${book.title}</strong></div><figcaption>Cover</figcaption></figure>`}</div>
+      <div class="book-cover" data-cover-count="${Number(Boolean(frontCover)) + Number(Boolean(backCover))}">${frontCover}${backCover || (frontCover ? "" : `<figure class="book-cover-side"><div class="book-placeholder" aria-hidden="true"><span>${index + 1}</span><strong>${book.title}</strong></div><figcaption>Cover</figcaption></figure>`)}</div>
       <div class="book-copy">
-        <p class="eyebrow">Book</p>
+        <p class="eyebrow">${book.comingSoon ? "Upcoming Book" : "Book"}</p>
         <h3>${book.title}</h3>
-        <p class="source">${book.year}</p>
+        ${book.comingSoon ? "" : `<p class="source">${book.year}</p>`}
         <p>${book.description}</p>
-        <div class="button-row">
-          <a class="button button-small" href="${book.amazonLink}">Buy on Amazon</a>
-          <a class="button button-small button-outline" href="${book.learnMoreLink}">Learn More</a>
-        </div>
+        ${actions}
       </div>
     `;
     return article;
@@ -151,7 +158,7 @@
     const archiveItems = data.archiveItems || [];
     const publications = data.publications || [];
     return {
-      books: (data.books || []).length,
+      books: (data.books || []).filter((book) => !book.comingSoon).length,
       columns: archiveItems.filter((item) => item.type && item.type.toLowerCase().includes("column")).length,
       publications: publications.length,
       national: publications.filter((pub) => pub.scope === "National").length,
@@ -208,10 +215,42 @@
     });
   }
 
+  function createColumnCard(item) {
+    const article = document.createElement("article");
+    article.className = "column-card";
+    const source = (item.publications || [])[0] || "";
+    const readLink = (item.sourceLinks || [])[0];
+    const readHref = readLink ? readLink.url : "archive.html";
+    const external = Boolean(readLink);
+    article.innerHTML = `
+      <div class="column-source">
+        <span>${source}</span>
+        <span>${item.publicationDate || ""}</span>
+      </div>
+      <h3>${item.title}</h3>
+      <p>${item.description}</p>
+      <a class="text-link" href="${readHref}"${external ? ` target="_blank" rel="noopener"` : ""}>Read the column</a>
+    `;
+    return article;
+  }
+
+  function renderColumns() {
+    const grid = qs("[data-columns-grid]");
+    if (!grid) return;
+    const columns = (data.archiveItems || [])
+      .filter((item) => item.type && item.type.toLowerCase().includes("column"))
+      .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
+    const limit = Number(grid.dataset.limit || columns.length);
+    columns.slice(0, limit).forEach((item) => grid.appendChild(createColumnCard(item)));
+  }
+
   function renderBooks() {
     const grid = qs("[data-books-grid]");
     if (!grid) return;
-    (data.books || []).forEach((book, index) => grid.appendChild(createBookCard(book, index)));
+    const excludeComingSoon = grid.hasAttribute("data-exclude-coming-soon");
+    (data.books || [])
+      .filter((book) => !excludeComingSoon || !book.comingSoon)
+      .forEach((book, index) => grid.appendChild(createBookCard(book, index)));
   }
 
   function renderPublications() {
@@ -407,6 +446,7 @@
     markCurrentPage();
     renderMetrics();
     renderArchive();
+    renderColumns();
     renderBooks();
     renderPublications();
     renderPublicationLogos();
