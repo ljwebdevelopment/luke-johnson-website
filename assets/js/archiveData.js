@@ -11,11 +11,12 @@ window.siteData = {
       title: "Dead Air America",
       year: "Upcoming book",
       comingSoon: true,
+      releaseWindow: "Fall 2026",
       coverImage: "assets/images/dead-air-america-cover-web.jpg",
       backCoverImage: "",
       description: "Luke Johnson's upcoming nonfiction book about growing up in a country where trust in institutions — media, politics, education, and technology — already feels fractured. Written from the perspective of a young American watching these systems shape his generation in real time, it explores the noise, pressure, and confusion of modern life while asking what it means to find a voice in a country that often feels like it has stopped listening.",
       amazonLink: "",
-      learnMoreLink: ""
+      learnMoreLink: "books.html#dead-air-america"
     },
     {
       title: "Becoming You: Advice From a Teenager",

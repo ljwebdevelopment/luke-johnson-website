@@ -119,7 +119,7 @@
       ? `<a class="button button-small button-outline" href="${book.learnMoreLink}">Learn More</a>`
       : "";
     const actions = book.comingSoon
-      ? `<span class="coming-soon">Coming Soon</span>`
+      ? `<span class="coming-soon">Coming Soon${book.releaseWindow ? ` &middot; ${book.releaseWindow}` : ""}</span>${learnMoreButton ? `<div class="button-row">${learnMoreButton}</div>` : ""}`
       : `<div class="button-row">${amazonButton}${learnMoreButton}</div>`;
 
     article.innerHTML = `
@@ -213,6 +213,12 @@
         applyFilters();
       });
     });
+
+    const queryParam = new URLSearchParams(window.location.search).get("q");
+    if (queryParam && search) {
+      search.value = queryParam;
+    }
+    applyFilters();
   }
 
   function createColumnCard(item) {
