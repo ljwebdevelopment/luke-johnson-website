@@ -1417,6 +1417,146 @@ p {
   margin: 0;
 }
 
+/* -------------------------------------------------- breadcrumbs */
+.breadcrumb-nav {
+  width: min(var(--wrap), 100% - (2 * var(--gutter)));
+  margin-inline: auto;
+  padding-top: 1.6rem;
+}
+
+.breadcrumb-nav ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.breadcrumb-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.breadcrumb-nav a:hover {
+  color: var(--accent-dark);
+  border-color: currentColor;
+}
+
+.breadcrumb-nav li[aria-current="page"] {
+  color: var(--ink-soft);
+}
+
+/* -------------------------------------------------- page meta / byline */
+.page-meta {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 0.6rem 0 0;
+}
+
+/* -------------------------------------------------- featured-snippet answer box */
+.snapshot-answer {
+  background: var(--white);
+  border: 1px solid var(--line-soft);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  padding: 1.6rem 1.8rem;
+  margin: 2rem 0;
+}
+
+.snapshot-answer p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+}
+
+.snapshot-answer strong {
+  color: var(--ink);
+}
+
+/* -------------------------------------------------- long-form prose sections */
+.long-form {
+  display: grid;
+  gap: 3rem;
+}
+
+.long-form section {
+  max-width: 74ch;
+}
+
+.long-form h2 {
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  margin-bottom: 1rem;
+}
+
+.long-form h3 {
+  margin-top: 1.6rem;
+  margin-bottom: 0.6rem;
+}
+
+.long-form p {
+  color: var(--ink-soft);
+  margin: 0 0 1.1rem;
+  max-width: 68ch;
+}
+
+.long-form ul {
+  margin: 0 0 1.1rem;
+  padding-left: 1.3rem;
+  color: var(--ink-soft);
+}
+
+.long-form li {
+  margin-bottom: 0.4rem;
+}
+
+/* -------------------------------------------------- FAQ accordion */
+.faq-list {
+  display: grid;
+  gap: 0.85rem;
+  max-width: 74ch;
+}
+
+.faq-list details {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+  padding: 1.1rem 1.4rem;
+}
+
+.faq-list summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--ink);
+  list-style: none;
+}
+
+.faq-list summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-list summary::after {
+  content: "+";
+  float: right;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.faq-list details[open] summary::after {
+  content: "\2212";
+}
+
+.faq-list p {
+  margin: 0.8rem 0 0;
+  color: var(--ink-soft);
+}
+
 /* -------------------------------------------------- contact page */
 .contact-layout {
   display: grid;
