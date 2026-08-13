@@ -28,24 +28,8 @@
       .replace(/(^-|-$)/g, "");
   }
 
-  function publicationByName(name) {
-    return (data.publications || []).find((pub) => pub.name === name);
-  }
-
   function fallbackMark(name) {
     return `<span>${initials(name)}</span>`;
-  }
-
-  function createPublicationLogo(name) {
-    const pub = publicationByName(name);
-    if (!pub || !pub.faviconUrl) {
-      return `<span class="mini-pub-mark" title="${name}">${initials(name)}</span>`;
-    }
-    return `
-      <span class="mini-pub-mark" title="${name}">
-        <img src="${pub.faviconUrl}" alt="" loading="lazy" onerror="this.remove(); this.parentElement.textContent='${initials(name)}';">
-      </span>
-    `;
   }
 
   function createBadges(badges) {
@@ -53,13 +37,19 @@
     return `<div class="badge-row">${badges.map((badge) => `<span class="badge">${badge}</span>`).join("")}</div>`;
   }
 
+  // True when every outlet already appears as a direct link, so listing the
+  // publication names again would just repeat the link row.
+  function linkedEverywhere(item) {
+    const labels = (item.sourceLinks || []).map((link) => link.label);
+    const publications = item.publications || [];
+    return publications.length > 0 && publications.every((name) => labels.includes(name));
+  }
+
   function createSourceLinks(links) {
-    if (!links || !links.length) {
-      return `<span class="verification-note">Source links need editorial confirmation.</span>`;
-    }
+    if (!links || !links.length) return "";
     return `
       <div class="source-links">
-        ${links.map((link) => `<a href="${link.url}" target="_blank" rel="noopener">Source: ${link.label}</a>`).join("")}
+        ${links.map((link) => `<a href="${link.url}" target="_blank" rel="noopener">${link.label}</a>`).join("")}
       </div>
     `;
   }
@@ -77,27 +67,20 @@
       item.category,
       item.description,
       item.publicationDate,
-      item.verificationStatus,
       publications.join(" "),
       badges.join(" ")
-    ].join(" ").toLowerCase();
+    ].filter(Boolean).join(" ").toLowerCase();
 
     article.innerHTML = `
       <div class="card-meta">
         <span>${item.type}</span>
-        <span>${item.publicationDate}</span>
+        ${item.publicationDate ? `<span>${item.publicationDate}</span>` : ""}
       </div>
       <h3>${item.title}</h3>
       ${createBadges(badges)}
-      <p class="source">${item.category}</p>
-      <p>${item.description}</p>
-      <div class="publication-line">
-        <div class="mini-pub-row" aria-label="Publications">${publications.map(createPublicationLogo).join("")}</div>
-        <span>${publications.length} ${publications.length === 1 ? "publication" : "publications"}</span>
-      </div>
-      <p class="publication-list">${publications.join(", ")}</p>
+      ${item.description ? `<p>${item.description}</p>` : ""}
+      ${linkedEverywhere(item) ? "" : `<p class="publication-list">${publications.join(" &middot; ")}</p>`}
       ${createSourceLinks(item.sourceLinks)}
-      ${item.verificationStatus ? `<p class="verification-note">${item.verificationStatus}</p>` : ""}
     `;
     return article;
   }
@@ -139,7 +122,7 @@
     const article = document.createElement("article");
     article.className = "publication-card";
     const mark = pub.faviconUrl
-      ? `<img src="${pub.faviconUrl}" alt="" loading="lazy" onerror="this.remove(); this.parentElement.innerHTML='${fallbackMark(pub.name).replace(/'/g, "\\'")}';">`
+      ? `<img src="${pub.faviconUrl}" alt="" loading="lazy" onerror="var p=this.parentElement; this.remove(); p.innerHTML='${fallbackMark(pub.name).replace(/'/g, "\\'")}';">`
       : fallbackMark(pub.name);
     article.innerHTML = `
       <div class="publication-mark">${mark}</div>
@@ -234,7 +217,7 @@
         <span>${item.publicationDate || ""}</span>
       </div>
       <h3>${item.title}</h3>
-      <p>${item.description}</p>
+      ${item.description ? `<p>${item.description}</p>` : ""}
       <a class="text-link" href="${readHref}"${external ? ` target="_blank" rel="noopener"` : ""}>Read the column</a>
     `;
     return article;
@@ -275,7 +258,7 @@
       cell.rel = "noopener";
     }
     const mark = pub.faviconUrl
-      ? `<img src="${pub.faviconUrl}" alt="" loading="lazy" onerror="this.remove(); this.parentElement.textContent='${initials(pub.name)}';">`
+      ? `<img src="${pub.faviconUrl}" alt="" loading="lazy" onerror="var p=this.parentElement; this.remove(); p.textContent='${initials(pub.name)}';">`
       : initials(pub.name);
     cell.innerHTML = `
       <span class="logo-mark" aria-hidden="true">${mark}</span>
