@@ -69,16 +69,16 @@
       item.publicationDate,
       publications.join(" "),
       badges.join(" ")
-    ].join(" ").toLowerCase();
+    ].filter(Boolean).join(" ").toLowerCase();
 
     article.innerHTML = `
       <div class="card-meta">
         <span>${item.type}</span>
-        <span>${item.publicationDate}</span>
+        ${item.publicationDate ? `<span>${item.publicationDate}</span>` : ""}
       </div>
       <h3>${item.title}</h3>
       ${createBadges(badges)}
-      <p>${item.description}</p>
+      ${item.description ? `<p>${item.description}</p>` : ""}
       ${linkedEverywhere(item) ? "" : `<p class="publication-list">${publications.join(" &middot; ")}</p>`}
       ${createSourceLinks(item.sourceLinks)}
     `;
@@ -217,7 +217,7 @@
         <span>${item.publicationDate || ""}</span>
       </div>
       <h3>${item.title}</h3>
-      <p>${item.description}</p>
+      ${item.description ? `<p>${item.description}</p>` : ""}
       <a class="text-link" href="${readHref}"${external ? ` target="_blank" rel="noopener"` : ""}>Read the column</a>
     `;
     return article;

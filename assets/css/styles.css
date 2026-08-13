@@ -589,6 +589,9 @@ p {
 
 .archive-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Cards carry very different amounts of copy — size each to its own
+     content rather than stretching short ones to match tall neighbours. */
+  align-items: start;
 }
 
 .archive-card,

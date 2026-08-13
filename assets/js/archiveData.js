@@ -291,6 +291,97 @@ window.siteData = {
       featured: true
     },
     {
+      title: "We've Forgotten How to Disagree",
+      type: "Column",
+      category: "Opinion",
+      description: "",
+      publications: ["Northeastern Journal"],
+      sourceLinks: [
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/article/opinion/weve-forgotten-how-to-disagree" }
+      ],
+      publicationDate: "",
+      badges: ["Opinion"],
+      featured: false
+    },
+    {
+      title: "The Future Feels Different Now",
+      type: "Column",
+      category: "Opinion",
+      description: "",
+      publications: ["Northeastern Journal"],
+      sourceLinks: [
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/article/opinion/the-future-feels-different-now" }
+      ],
+      publicationDate: "",
+      badges: ["Opinion"],
+      featured: false
+    },
+    {
+      title: "Nobody's Asking Us",
+      type: "Column",
+      category: "Politics",
+      description: "",
+      publications: ["Northeastern Journal"],
+      sourceLinks: [
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/article/politics/nobodys-asking-us" }
+      ],
+      publicationDate: "",
+      badges: ["Politics"],
+      featured: false
+    },
+    {
+      title: "Coming of Age During a War Nobody Declared",
+      type: "Column",
+      category: "Opinion",
+      description: "",
+      publications: ["Northeastern Journal"],
+      sourceLinks: [
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/article/opinion/coming-of-age-during-a-war-nobody-declared" }
+      ],
+      publicationDate: "",
+      badges: ["Opinion"],
+      featured: false
+    },
+    {
+      title: "Rural, Young, and Politically Homeless",
+      type: "Column",
+      category: "Opinion",
+      description: "",
+      publications: ["Northeastern Journal"],
+      sourceLinks: [
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/article/opinion/rural-young-and-politically-homeless" }
+      ],
+      publicationDate: "",
+      badges: ["Opinion"],
+      featured: false
+    },
+    {
+      title: "On Being Someone's Twin",
+      type: "Column",
+      category: "Editorial",
+      description: "",
+      publications: ["Northeastern Journal"],
+      sourceLinks: [
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/article/editorial/on-being-someones-twin" }
+      ],
+      publicationDate: "",
+      badges: ["Editorial"],
+      featured: false
+    },
+    {
+      title: "The Strange Experience of Outgrowing Yourself",
+      type: "Column",
+      category: "Opinion",
+      description: "",
+      publications: ["Northeastern Journal"],
+      sourceLinks: [
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/article/local-news/the-strange-experience-of-outgrowing-yourself" }
+      ],
+      publicationDate: "",
+      badges: ["Opinion"],
+      featured: false
+    },
+    {
       title: "The Cost of Growing Up Online",
       type: "Nationally Syndicated Column",
       category: "Technology / Culture / Opinion",
