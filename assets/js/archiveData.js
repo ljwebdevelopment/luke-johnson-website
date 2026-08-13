@@ -49,6 +49,16 @@ window.siteData = {
       verified: true
     },
     {
+      name: "Northeastern Journal",
+      location: "Tahlequah, Oklahoma",
+      type: "Newspaper",
+      scope: "Local",
+      description: "Northeastern Oklahoma news outlet that publishes Luke's columns and local reporting on its site.",
+      website: "https://www.northeasternjournal.com/author/luke-johnson",
+      faviconUrl: "https://www.northeasternjournal.com/favicon.ico",
+      verified: true
+    },
+    {
       name: "Muskogee Phoenix",
       location: "Muskogee, Oklahoma",
       type: "Newspaper",
@@ -247,9 +257,39 @@ window.siteData = {
       website: "https://www.sharonherald.com/",
       faviconUrl: "https://www.sharonherald.com/favicon.ico",
       verified: true
+    },
+    {
+      name: "Allied News",
+      location: "Grove City, Pennsylvania",
+      type: "Newspaper",
+      scope: "Regional",
+      description: "Western Pennsylvania newspaper that carried Luke's column on his week at Yale.",
+      website: "https://www.alliednews.com/",
+      faviconUrl: "https://www.alliednews.com/favicon.ico",
+      verified: true
     }
   ],
   archiveItems: [
+    {
+      title: "A Week at Yale With Community's Help",
+      type: "Column",
+      category: "Opinion / Education",
+      description: "A column about the week Luke spent at Yale's National Youth Leadership Forum on Medicine and Health Care — suturing, phlebotomy, triage, emergency medicine, and neurology alongside students from across the country — and about the Tahlequah community that helped make the trip possible.",
+      publications: ["Tahlequah Daily Press", "Muskogee Phoenix", "Northeastern Journal", "Stilwell Democrat Journal", "Enid News & Eagle", "The Duncan Banner", "Allied News"],
+      sourceLinks: [
+        { label: "Tahlequah Daily Press", url: "https://www.tahlequahdailypress.com/opinion/column-a-week-at-yale-with-communitys-help/article_4f3d5972-b017-46f8-b911-667a555b5306.html" },
+        { label: "Muskogee Phoenix", url: "https://www.muskogeephoenix.com/opinion/column-a-week-at-yale-with-communitys-help/article_9ae6f4a9-7df3-5e3d-be85-15eb4316914d.html" },
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/article/local-news/a-week-at-yale" },
+        { label: "Stilwell Democrat Journal", url: "https://www.stilwelldemocrat.com/opinion/column-a-week-at-yale-with-communitys-help/article_6c34e1ee-693c-5832-ae19-2cff94302e77.html" },
+        { label: "Enid News & Eagle", url: "https://www.enidnews.com/opinion/column-a-week-at-yale-with-communitys-help/article_1fa54140-ce36-5d03-b92f-11c27391de35.html" },
+        { label: "The Duncan Banner", url: "https://www.duncanbanner.com/opinion/column-a-week-at-yale-with-communitys-help/article_49e302ab-7a11-58e5-b70c-714b07267965.html" },
+        { label: "Allied News", url: "https://www.alliednews.com/cnhi/opinion/column-a-week-at-yale-with-communitys-help/article_380225c4-38cf-5f29-9353-f809c5438545.html" },
+        { label: "Ground News", url: "https://ground.news/article/column-a-week-at-yale-with-communitys-help" }
+      ],
+      publicationDate: "July 2026",
+      badges: ["Opinion", "Education", "Youth Issues"],
+      featured: true
+    },
     {
       title: "The Cost of Growing Up Online",
       type: "Nationally Syndicated Column",
@@ -261,9 +301,7 @@ window.siteData = {
       ],
       publicationDate: "Submitted May 21, 2026",
       badges: ["Nationally Syndicated", "Opinion", "Technology", "Culture", "Youth Issues"],
-      featured: true,
-      verificationStatus: "Gmail submission verified; complete public syndication list needs editorial confirmation.",
-      editorialReference: "kpoindexter@tahlequahdailypress.com"
+      featured: true
     },
     {
       title: "Education Needs Balance, Not Bans",
@@ -278,9 +316,7 @@ window.siteData = {
       ],
       publicationDate: "Submitted Oct. 29, 2025",
       badges: ["Opinion", "Education", "Youth Issues", "Widely Syndicated"],
-      featured: true,
-      verificationStatus: "Gmail submission verified; public aggregator evidence found for multiple outlets.",
-      editorialReference: "kpoindexter@tahlequahdailypress.com"
+      featured: true
     },
     {
       title: "The Pressure Teens Carry in Today's World",
@@ -291,9 +327,7 @@ window.siteData = {
       sourceLinks: [],
       publicationDate: "Submitted Dec. 22, 2025",
       badges: ["Opinion", "Society", "Youth Issues", "Culture"],
-      featured: false,
-      verificationStatus: "Gmail submission verified; public source links need editorial confirmation.",
-      editorialReference: "kpoindexter@tahlequahdailypress.com"
+      featured: false
     },
     {
       title: "Reactions to Student Protests Discouraging",
@@ -304,9 +338,7 @@ window.siteData = {
       sourceLinks: [],
       publicationDate: "Submitted Mar. 5, 2026",
       badges: ["Opinion", "Civic Engagement", "Politics", "Youth Issues"],
-      featured: false,
-      verificationStatus: "Gmail submission verified; final title/publication dates need editorial confirmation.",
-      editorialReference: "kpoindexter@tahlequahdailypress.com"
+      featured: false
     },
     {
       title: "Politics Isn't Just for Adults",
@@ -319,9 +351,7 @@ window.siteData = {
       ],
       publicationDate: "Submitted Oct. 12, 2025",
       badges: ["Opinion", "Politics", "Youth Issues"],
-      featured: false,
-      verificationStatus: "Gmail submission verified; some public aggregator evidence found.",
-      editorialReference: "kpoindexter@tahlequahdailypress.com"
+      featured: false
     },
     {
       title: "Students Grow, Evolve in a Digital World",
@@ -332,9 +362,7 @@ window.siteData = {
       sourceLinks: [],
       publicationDate: "Needs editorial confirmation",
       badges: ["Feature", "Technology", "Youth Issues", "Culture"],
-      featured: false,
-      verificationStatus: "Structured placeholder; public source link and date need confirmation.",
-      editorialReference: "kpoindexter@tahlequahdailypress.com"
+      featured: false
     },
     {
       title: "Statehouse Session: Education One of Top Concerns at Legislative Forum",
@@ -347,9 +375,7 @@ window.siteData = {
       ],
       publicationDate: "Mar. 1, 2025",
       badges: ["Speaking", "Education", "Student Voice", "Press"],
-      featured: false,
-      verificationStatus: "Public source verified.",
-      editorialReference: "kpoindexter@tahlequahdailypress.com"
+      featured: false
     },
     {
       title: "Becoming You: Advice From a Teenager",
@@ -360,9 +386,7 @@ window.siteData = {
       sourceLinks: [],
       publicationDate: "Published book",
       badges: ["Book", "Identity", "Youth Issues"],
-      featured: false,
-      verificationStatus: "Book record; retail/source link can be added when confirmed.",
-      editorialReference: ""
+      featured: false
     },
     {
       title: "We're All The Same",
@@ -373,9 +397,7 @@ window.siteData = {
       sourceLinks: [],
       publicationDate: "Published book",
       badges: ["Book", "Autism Awareness", "Inclusion"],
-      featured: false,
-      verificationStatus: "Book record; retail/source link can be added when confirmed.",
-      editorialReference: ""
+      featured: false
     }
   ]
 };
