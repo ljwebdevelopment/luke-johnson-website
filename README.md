@@ -2,6 +2,14 @@
 
 Static author and columnist website for Luke Johnson.
 
+## Content
+
+All site content — books, publications, columns, and the links out to each
+published article — lives in `assets/js/archiveData.js`. The pages render
+themselves from it, and the homepage counters (books, columns, publications)
+are derived from the same data, so adding a column or an outlet there updates
+the whole site. `index.html` carries matching numbers as a no-JS fallback.
+
 ## Contact Form Google Sheets Setup
 
 The contact form is wired to send submissions to a Google Apps Script Web App. The form posts these columns:
