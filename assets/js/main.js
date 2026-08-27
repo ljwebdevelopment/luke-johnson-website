@@ -279,10 +279,41 @@
     const nav = qs("#site-navigation");
     if (!toggle || !nav) return;
 
-    toggle.addEventListener("click", () => {
-      const isOpen = toggle.getAttribute("aria-expanded") === "true";
-      toggle.setAttribute("aria-expanded", String(!isOpen));
-      nav.classList.toggle("is-open", !isOpen);
+    function setOpen(open) {
+      toggle.setAttribute("aria-expanded", String(open));
+      nav.classList.toggle("is-open", open);
+      // Locks the page behind the drawer; the class is a no-op above the
+      // breakpoint where the drawer doesn't exist.
+      document.body.classList.toggle("nav-open", open);
+    }
+
+    function isOpen() {
+      return toggle.getAttribute("aria-expanded") === "true";
+    }
+
+    toggle.addEventListener("click", () => setOpen(!isOpen()));
+
+    // Tapping a destination should take you there, not leave the drawer over it.
+    qsa(".nav-link", nav).forEach((link) => {
+      link.addEventListener("click", () => setOpen(false));
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && isOpen()) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!isOpen()) return;
+      if (nav.contains(event.target) || toggle.contains(event.target)) return;
+      setOpen(false);
+    });
+
+    // Rotating to landscape can cross the breakpoint and strand the lock.
+    window.addEventListener("resize", () => {
+      if (isOpen() && window.innerWidth > 960) setOpen(false);
     });
   }
 

@@ -259,6 +259,66 @@ window.siteData = {
       verified: true
     },
     {
+      name: "Pharos-Tribune",
+      location: "Logansport, Indiana",
+      type: "Newspaper",
+      scope: "Regional",
+      description: "Indiana daily newspaper that ran Luke's Kids & Screens column on growing up online.",
+      website: "https://www.pharostribune.com/",
+      faviconUrl: "https://www.pharostribune.com/favicon.ico",
+      verified: true
+    },
+    {
+      name: "News and Tribune",
+      location: "Jeffersonville, Indiana",
+      type: "Newspaper",
+      scope: "Regional",
+      description: "Southern Indiana daily newspaper that carried the national roundtable feature Luke took part in.",
+      website: "https://www.newsandtribune.com/",
+      faviconUrl: "https://www.newsandtribune.com/favicon.ico",
+      verified: true
+    },
+    {
+      name: "The Herald Bulletin",
+      location: "Anderson, Indiana",
+      type: "Newspaper",
+      scope: "Regional",
+      description: "Central Indiana daily newspaper that published the digital-world student feature Luke contributed to.",
+      website: "https://www.heraldbulletin.com/",
+      faviconUrl: "https://www.heraldbulletin.com/favicon.ico",
+      verified: true
+    },
+    {
+      name: "The Lebanon Reporter",
+      location: "Lebanon, Indiana",
+      type: "Newspaper",
+      scope: "Regional",
+      description: "Boone County, Indiana newspaper that published Luke's column on the pressure teenagers carry.",
+      website: "https://www.reporter.net/",
+      faviconUrl: "https://www.reporter.net/favicon.ico",
+      verified: true
+    },
+    {
+      name: "Gainesville Register",
+      location: "Gainesville, Texas",
+      type: "Newspaper",
+      scope: "Regional",
+      description: "North Texas newspaper that carried Luke's column on youth involvement in politics.",
+      website: "https://www.gainesvilleregister.com/",
+      faviconUrl: "https://www.gainesvilleregister.com/favicon.ico",
+      verified: true
+    },
+    {
+      name: "CNHI News Service",
+      location: "National",
+      type: "Wire Service",
+      scope: "National",
+      description: "National news service whose Oklahoma and network wires distribute Luke's columns to member newspapers across the country.",
+      website: "https://www.cnhinews.com/",
+      faviconUrl: "https://www.cnhinews.com/favicon.ico",
+      verified: true
+    },
+    {
       name: "Allied News",
       location: "Grove City, Pennsylvania",
       type: "Newspaper",
@@ -270,6 +330,20 @@ window.siteData = {
     }
   ],
   archiveItems: [
+    {
+      title: "Six Flock Cameras in Tahlequah Too Many",
+      type: "Column",
+      category: "Opinion / Civil Liberties",
+      description: "A column on the six Flock Safety license-plate readers now watching the roads into Tahlequah \u2014 and on what it means when the surveillance a teenager once thought of as a big-city problem turns up two minutes from his house.",
+      publications: ["Tahlequah Daily Press", "CNHI News Service"],
+      sourceLinks: [
+        { label: "Tahlequah Daily Press", url: "https://www.tahlequahdailypress.com/opinion/column-six-flock-cameras-in-tahlequah-too-many/article_538df285-7dba-44d9-807b-2067477c1af3.html" },
+        { label: "CNHI News Service", url: "https://www.cnhinews.com/oklahoma/opinion/article_11b5542c-44ac-5120-a528-7e7d63946e17.html" }
+      ],
+      publicationDate: "Aug. 21, 2026",
+      badges: ["Opinion", "Privacy", "Civil Liberties", "Local Government"],
+      featured: true
+    },
     {
       title: "A Week at Yale With Community's Help",
       type: "Column",
@@ -386,9 +460,13 @@ window.siteData = {
       type: "Nationally Syndicated Column",
       category: "Technology / Culture / Opinion",
       description: "A nationally distributed column examining technology, social media, identity, online culture, and the long-term effects of growing up in a permanently connected world.",
-      publications: ["Tahlequah Daily Press", "Effingham Daily News", "The Tribune-Democrat", "Yahoo Life", "The Herald / Sharon Herald"],
+      publications: ["Tahlequah Daily Press", "The Tribune-Democrat", "The Register-Herald", "The Huntsville Item", "Pharos-Tribune", "Effingham Daily News", "Yahoo Life", "The Herald / Sharon Herald"],
       sourceLinks: [
-        { label: "HARO syndication reference", url: "https://www.helpareporter.com/journalist/luke-johnson" }
+        { label: "Tahlequah Daily Press", url: "https://www.tahlequahdailypress.com/opinion/column-the-cost-of-growing-up-online/article_e61ecb65-b14d-4b2c-b6fc-ab4d927dc558.html" },
+        { label: "The Tribune-Democrat", url: "https://www.tribdem.com/news/local_news/kids-screens-luke-johnson-the-cost-of-growing-up-online/article_3b85bb88-1edc-4136-b1b1-db02bf312b9e.html" },
+        { label: "The Register-Herald", url: "https://www.register-herald.com/cnhi_network/the-cost-of-growing-up-online/article_cbe6dbfd-5f00-5053-a612-af7a6b0c8bf4.html" },
+        { label: "The Huntsville Item", url: "https://www.itemonline.com/cnhi_network/the-cost-of-growing-up-online/article_772c3805-2bcd-5928-9814-4989cd586cb7.html" },
+        { label: "Pharos-Tribune", url: "https://www.pharostribune.com/opinion/article_1585f7f8-11fa-5b57-b52a-61f4709d7946.html" }
       ],
       publicationDate: "Submitted May 21, 2026",
       badges: ["Nationally Syndicated", "Opinion", "Technology", "Culture", "Youth Issues"],
@@ -399,11 +477,15 @@ window.siteData = {
       type: "Column",
       category: "Opinion / Education",
       description: "A column discussing education policy, censorship concerns, classroom balance, and the role of students within modern education debates.",
-      publications: ["Tahlequah Daily Press", "Muskogee Phoenix", "Enid News & Eagle", "Stilwell Democrat Journal", "Norman Transcript", "Pauls Valley Democrat", "Ada News", "McAlester News-Capital", "The Duncan Banner", "Stillwater News Press"],
+      publications: ["Tahlequah Daily Press", "Muskogee Phoenix", "Enid News & Eagle", "Stilwell Democrat Journal", "Norman Transcript", "Pauls Valley Democrat", "Ada News", "McAlester News-Capital", "The Duncan Banner", "Stillwater News Press", "The Express-Star"],
       sourceLinks: [
-        { label: "Tahlequah Daily Press aggregator", url: "https://spotonoklahoma.com/ok-politics/1277637/column-education-needs-balance-not-bans.html" },
-        { label: "Stillwater News Press aggregator", url: "https://spotonoklahoma.com/frontier-country/1277761/column-education-needs-balance-not-bans.html" },
-        { label: "McAlester News-Capital aggregator", url: "https://spotonoklahoma.com/kiamichi-country/1277765/column-education-needs-balance-not-bans.html" }
+        { label: "Tahlequah Daily Press", url: "https://www.tahlequahdailypress.com/opinion/column-education-needs-balance-not-bans/article_966579b7-63bc-4359-ad7c-af643f6c4a95.html" },
+        { label: "Enid News & Eagle", url: "https://www.enidnews.com/opinion/column-education-needs-balance-not-bans/article_a8f2c7d2-06f0-5546-8213-e9a6fab2e799.html" },
+        { label: "The Duncan Banner", url: "https://www.duncanbanner.com/opinion/column-education-needs-balance-not-bans/article_b5109af8-40a4-5d22-a45f-0d7c481152fa.html" },
+        { label: "The Express-Star", url: "https://www.chickashanews.com/opinion/column-education-needs-balance-not-bans/article_9fa9ad28-d1c2-539c-baff-4e1224e20cb7.html" },
+        { label: "Stillwater News Press", url: "https://www.stwnewspress.com/opinion/column-education-needs-balance-not-bans/article_d4aa7699-86e1-538c-8a53-30abef499ace.html" },
+        { label: "McAlester News-Capital", url: "https://www.mcalesternews.com/opinion/column-education-needs-balance-not-bans/article_2907b04d-58ae-5689-89a0-302a14b323e0.html" },
+        { label: "Pauls Valley Democrat", url: "https://www.paulsvalleydailydemocrat.com/opinion/column-education-needs-balance-not-bans/article_0144fd29-235a-59f6-8760-b201339fa2a3.html" }
       ],
       publicationDate: "Submitted Oct. 29, 2025",
       badges: ["Opinion", "Education", "Youth Issues", "Widely Syndicated"],
@@ -414,8 +496,12 @@ window.siteData = {
       type: "Column",
       category: "Opinion / Society",
       description: "A column examining mental health, expectations, social pressure, academics, technology, and the realities many teenagers face today.",
-      publications: ["Tahlequah Daily Press", "The Express-Star", "Muskogee Phoenix", "The Daily Star", "The Huntsville Item"],
-      sourceLinks: [],
+      publications: ["Tahlequah Daily Press", "The Express-Star", "Muskogee Phoenix", "The Daily Star", "Ada News", "The Lebanon Reporter", "The Huntsville Item"],
+      sourceLinks: [
+        { label: "The Daily Star", url: "https://www.thedailystar.com/opinion/columns/the-pressure-teens-are-carrying-in-todays-world/article_cce2496d-2d39-43bd-8773-a6dc7c621a51.html" },
+        { label: "Ada News", url: "https://www.theadanews.com/opinion/guest-column-the-pressure-teens-carry-in-todays-world/article_7c246e6e-1732-54c4-9905-0cf6fbd807f7.html" },
+        { label: "The Lebanon Reporter", url: "https://www.reporter.net/opinion/column-the-pressure-teens-carry-in-todays-world/article_e9a8a882-8fc4-5831-b1dd-d7d19dd8d12e.html" }
+      ],
       publicationDate: "Submitted Dec. 22, 2025",
       badges: ["Opinion", "Society", "Youth Issues", "Culture"],
       featured: false
@@ -436,9 +522,12 @@ window.siteData = {
       type: "Column",
       category: "Opinion / Politics",
       description: "A column discussing youth involvement in politics and why political issues directly affect younger generations.",
-      publications: ["Tahlequah Daily Press", "Muskogee Phoenix"],
+      publications: ["Tahlequah Daily Press", "Muskogee Phoenix", "Ada News", "Gainesville Register", "Weatherford Democrat"],
       sourceLinks: [
-        { label: "Weatherford Democrat aggregator", url: "https://article.wn.com/view/2025/11/04/COLUMN_Politics_isnt_just_for_adults_y/" }
+        { label: "Tahlequah Daily Press", url: "https://www.tahlequahdailypress.com/opinion/column-politics-isnt-just-for-adults/article_2bca86fe-5344-4f2c-9759-f43a69f35d54.html" },
+        { label: "Muskogee Phoenix", url: "https://www.muskogeephoenix.com/opinion/column-politics-isnt-just-for-adults/article_6e80e02e-705c-578b-8b87-85c5318fe6a3.html" },
+        { label: "Ada News", url: "https://www.theadanews.com/opinion/column-politics-isnt-just-for-adults/article_3eb5131b-119a-5678-b3e2-3acc904e81b4.html" },
+        { label: "Gainesville Register", url: "https://www.gainesvilleregister.com/opinion/column-politics-isnt-just-for-adults/article_f95c3974-08f6-5a48-ad0d-4360f0c8ff98.html" }
       ],
       publicationDate: "Submitted Oct. 12, 2025",
       badges: ["Opinion", "Politics", "Youth Issues"],
@@ -449,9 +538,13 @@ window.siteData = {
       type: "Feature",
       category: "Technology / Youth",
       description: "A national roundtable feature where Luke participated in a discussion about teenagers, technology, and growing up with screens.",
-      publications: ["CNHI", "Tahlequah Daily Press", "Yahoo Life"],
-      sourceLinks: [],
-      publicationDate: "Needs editorial confirmation",
+      publications: ["CNHI News Service", "News and Tribune", "The Herald Bulletin", "The Huntsville Item", "Tahlequah Daily Press", "Yahoo Life"],
+      sourceLinks: [
+        { label: "News and Tribune", url: "https://www.newsandtribune.com/news/students-grow-evolve-in-a-digital-world/article_6e04978e-92a3-4411-990b-15eaead105a0.html" },
+        { label: "The Herald Bulletin", url: "https://www.heraldbulletin.com/news/state_news/students-grow-evolve-in-a-digital-world/article_638897f7-e1ca-404f-86eb-a40e19acac33.html" },
+        { label: "The Huntsville Item", url: "https://www.itemonline.com/cnhi_network/students-grow-evolve-in-a-digital-world/article_a7f28e2a-73f8-55ac-8737-476c699fd3a3.html" }
+      ],
+      publicationDate: "May 2026",
       badges: ["Feature", "Technology", "Youth Issues", "Culture"],
       featured: false
     },
@@ -462,7 +555,8 @@ window.siteData = {
       description: "Coverage of Luke asking questions at a legislative forum about education, teacher engagement, state testing, and issues affecting students.",
       publications: ["Tahlequah Daily Press", "Yahoo Life"],
       sourceLinks: [
-        { label: "Yahoo / Tahlequah Daily Press", url: "https://www.yahoo.com/news/statehouse-session-education-one-top-045900200.html" }
+        { label: "Tahlequah Daily Press", url: "https://www.tahlequahdailypress.com/news/statehouse-session-education-one-of-top-concerns-at-legislative-forum/article_a0aa912e-f5ef-11ef-9a83-83638863d711.html" },
+        { label: "Yahoo News", url: "https://www.yahoo.com/news/statehouse-session-education-one-top-045900200.html" }
       ],
       publicationDate: "Mar. 1, 2025",
       badges: ["Speaking", "Education", "Student Voice", "Press"],
