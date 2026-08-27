@@ -319,6 +319,16 @@ window.siteData = {
       verified: true
     },
     {
+      name: "Woodward News",
+      location: "Woodward, Oklahoma",
+      type: "Newspaper",
+      scope: "Regional",
+      description: "Northwestern Oklahoma newspaper that carried Luke's column on his week at Yale through CNHI syndication.",
+      website: "https://www.woodwardnews.net/",
+      faviconUrl: "https://www.woodwardnews.net/favicon.ico",
+      verified: true
+    },
+    {
       name: "Allied News",
       location: "Grove City, Pennsylvania",
       type: "Newspaper",
@@ -349,7 +359,7 @@ window.siteData = {
       type: "Column",
       category: "Opinion / Education",
       description: "A column about the week Luke spent at Yale's National Youth Leadership Forum on Medicine and Health Care — suturing, phlebotomy, triage, emergency medicine, and neurology alongside students from across the country — and about the Tahlequah community that helped make the trip possible.",
-      publications: ["Tahlequah Daily Press", "Muskogee Phoenix", "Northeastern Journal", "Stilwell Democrat Journal", "Enid News & Eagle", "The Duncan Banner", "Allied News"],
+      publications: ["Tahlequah Daily Press", "Muskogee Phoenix", "Northeastern Journal", "Stilwell Democrat Journal", "Enid News & Eagle", "The Duncan Banner", "Allied News", "Ada News", "Woodward News", "CNHI News Service"],
       sourceLinks: [
         { label: "Tahlequah Daily Press", url: "https://www.tahlequahdailypress.com/opinion/column-a-week-at-yale-with-communitys-help/article_4f3d5972-b017-46f8-b911-667a555b5306.html" },
         { label: "Muskogee Phoenix", url: "https://www.muskogeephoenix.com/opinion/column-a-week-at-yale-with-communitys-help/article_9ae6f4a9-7df3-5e3d-be85-15eb4316914d.html" },
