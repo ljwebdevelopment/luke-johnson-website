@@ -9,32 +9,12 @@
     return Array.from(scope.querySelectorAll(selector));
   }
 
-  function initials(name) {
-    return name
-      .replace(/The\s+/gi, "")
-      .split(/\s+|\/|&|-/)
-      .filter(Boolean)
-      .slice(0, 3)
-      .map((word) => word[0])
-      .join("")
-      .toUpperCase();
-  }
-
   function slug(value) {
     return String(value || "")
       .toLowerCase()
       .replace(/&/g, "and")
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "");
-  }
-
-  function fallbackMark(name) {
-    return `<span>${initials(name)}</span>`;
-  }
-
-  function createBadges(badges) {
-    if (!badges || !badges.length) return "";
-    return `<div class="badge-row">${badges.map((badge) => `<span class="badge">${badge}</span>`).join("")}</div>`;
   }
 
   // True when every outlet already appears as a direct link, so listing the
@@ -48,15 +28,15 @@
   function createSourceLinks(links) {
     if (!links || !links.length) return "";
     return `
-      <div class="source-links">
-        ${links.map((link) => `<a href="${link.url}" target="_blank" rel="noopener">${link.label}</a>`).join("")}
+      <div class="archive-row-links">
+        ${links.map((link) => `<a href="${link.url}" target="_blank" rel="noopener">Read at ${link.label}</a>`).join("")}
       </div>
     `;
   }
 
-  function createArchiveCard(item) {
+  function createArchiveRow(item) {
     const article = document.createElement("article");
-    article.className = "archive-card";
+    article.className = "archive-row";
     const badges = item.badges || [];
     const publications = item.publications || [];
     article.dataset.category = slug(item.type);
@@ -71,92 +51,23 @@
       badges.join(" ")
     ].filter(Boolean).join(" ").toLowerCase();
 
+    const hasLinks = (item.sourceLinks || []).length > 0;
+    const showPublicationNote = !linkedEverywhere(item) && publications.length;
+
     article.innerHTML = `
-      <div class="card-meta">
-        <span>${item.type}</span>
-        ${item.publicationDate ? `<span>${item.publicationDate}</span>` : ""}
+      <div>
+        <span class="archive-row-meta">${item.type}${item.category ? ` &middot; ${item.category}` : ""}</span>
+        <h3>${item.title}</h3>
+        ${item.description ? `<p>${item.description}</p>` : ""}
+        ${showPublicationNote ? `<p class="publication-note">${publications.join(" &middot; ")}</p>` : ""}
+        ${createSourceLinks(item.sourceLinks)}
+        ${!hasLinks && item.type !== "Book" ? `<p class="subscriber-note">Full text available through the publication listed.</p>` : ""}
       </div>
-      <h3>${item.title}</h3>
-      ${createBadges(badges)}
-      ${item.description ? `<p>${item.description}</p>` : ""}
-      ${linkedEverywhere(item) ? "" : `<p class="publication-list">${publications.join(" &middot; ")}</p>`}
-      ${createSourceLinks(item.sourceLinks)}
-    `;
-    return article;
-  }
-
-  function createBookCard(book, index) {
-    const article = document.createElement("article");
-    article.className = "book-card";
-    const frontCover = book.coverImage
-      ? `<figure class="book-cover-side"><img src="${book.coverImage}" alt="Front cover of ${book.title}" loading="lazy" onerror="this.closest('figure').remove();"><figcaption>Front</figcaption></figure>`
-      : "";
-    const backCover = book.backCoverImage
-      ? `<figure class="book-cover-side"><img src="${book.backCoverImage}" alt="Back cover of ${book.title}" loading="lazy"><figcaption>Back</figcaption></figure>`
-      : "";
-
-    const amazonButton = book.amazonLink
-      ? `<a class="button button-small" href="${book.amazonLink}" target="_blank" rel="noopener">Buy on Amazon</a>`
-      : "";
-    const learnMoreButton = book.learnMoreLink
-      ? `<a class="button button-small button-outline" href="${book.learnMoreLink}">Learn More</a>`
-      : "";
-    const actions = book.comingSoon
-      ? `<span class="coming-soon">Coming Soon${book.releaseWindow ? ` &middot; ${book.releaseWindow}` : ""}</span>${learnMoreButton ? `<div class="button-row">${learnMoreButton}</div>` : ""}`
-      : `<div class="button-row">${amazonButton}${learnMoreButton}</div>`;
-
-    article.innerHTML = `
-      <div class="book-cover" data-cover-count="${Number(Boolean(frontCover)) + Number(Boolean(backCover))}">${frontCover}${backCover || (frontCover ? "" : `<figure class="book-cover-side"><div class="book-placeholder" aria-hidden="true"><span>${index + 1}</span><strong>${book.title}</strong></div><figcaption>Cover</figcaption></figure>`)}</div>
-      <div class="book-copy">
-        <p class="eyebrow">${book.comingSoon ? "Upcoming Book" : "Book"}</p>
-        <h3>${book.title}</h3>
-        ${book.comingSoon ? "" : `<p class="source">${book.year}</p>`}
-        <p>${book.description}</p>
-        ${actions}
+      <div class="archive-row-side">
+        ${item.publicationDate ? `<span class="pub-date">${item.publicationDate}</span>` : ""}
       </div>
     `;
     return article;
-  }
-
-  function createPublicationCard(pub) {
-    const article = document.createElement("article");
-    article.className = "publication-card";
-    const mark = pub.faviconUrl
-      ? `<img src="${pub.faviconUrl}" alt="" loading="lazy" onerror="var p=this.parentElement; this.remove(); p.innerHTML='${fallbackMark(pub.name).replace(/'/g, "\\'")}';">`
-      : fallbackMark(pub.name);
-    article.innerHTML = `
-      <div class="publication-mark">${mark}</div>
-      <h3>${pub.name}</h3>
-      <p>${pub.location}</p>
-      <p>${pub.description}</p>
-      <div class="pub-card-footer">
-        <span class="pub-type">${pub.type} / ${pub.scope}</span>
-        <a class="text-link" href="${pub.website}" target="_blank" rel="noopener">Visit Site</a>
-      </div>
-    `;
-    return article;
-  }
-
-  function calculateMetrics() {
-    const archiveItems = data.archiveItems || [];
-    const publications = data.publications || [];
-    return {
-      books: (data.books || []).filter((book) => !book.comingSoon).length,
-      columns: archiveItems.filter((item) => item.type && item.type.toLowerCase().includes("column")).length,
-      publications: publications.length,
-      national: publications.filter((pub) => pub.scope === "National").length,
-      syndicated: archiveItems.filter((item) => (item.publications || []).length > 1 && item.type && item.type.toLowerCase().includes("column")).length
-    };
-  }
-
-  function renderMetrics() {
-    const metrics = calculateMetrics();
-    qsa("[data-metric]").forEach((node) => {
-      const key = node.dataset.metric;
-      if (Object.prototype.hasOwnProperty.call(metrics, key)) {
-        node.textContent = metrics[key];
-      }
-    });
   }
 
   function renderArchive() {
@@ -165,8 +76,7 @@
 
     const items = (data.archiveItems || []).slice();
     items.sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
-    const limit = Number(grid.dataset.limit || items.length);
-    items.slice(0, limit).forEach((item) => grid.appendChild(createArchiveCard(item)));
+    items.forEach((item) => grid.appendChild(createArchiveRow(item)));
 
     const search = qs("[data-archive-search]");
     const filters = qsa("[data-filter]");
@@ -177,11 +87,11 @@
       const active = (qs("[data-filter].is-active") || {}).dataset?.filter || "all";
       let shown = 0;
 
-      qsa(".archive-card", grid).forEach((card) => {
-        const matchesFilter = active === "all" || card.dataset.filters.includes(active) || card.dataset.category === active;
-        const matchesSearch = !query || card.dataset.search.includes(query);
+      qsa(".archive-row", grid).forEach((row) => {
+        const matchesFilter = active === "all" || row.dataset.filters.includes(active) || row.dataset.category === active;
+        const matchesSearch = !query || row.dataset.search.includes(query);
         const visible = matchesFilter && matchesSearch;
-        card.hidden = !visible;
+        row.hidden = !visible;
         if (visible) shown += 1;
       });
 
@@ -204,33 +114,103 @@
     applyFilters();
   }
 
-  function createColumnCard(item) {
-    const article = document.createElement("article");
-    article.className = "column-card";
-    const source = (item.publications || [])[0] || "";
-    const readLink = (item.sourceLinks || [])[0];
-    const readHref = readLink ? readLink.url : "archive.html";
-    const external = Boolean(readLink);
-    article.innerHTML = `
-      <div class="column-source">
-        <span>${source}</span>
-        <span>${item.publicationDate || ""}</span>
-      </div>
-      <h3>${item.title}</h3>
-      ${item.description ? `<p>${item.description}</p>` : ""}
-      <a class="text-link" href="${readHref}"${external ? ` target="_blank" rel="noopener"` : ""}>Read the column</a>
-    `;
-    return article;
+  function renderArchiveTeaser() {
+    const list = qs("[data-archive-teaser]");
+    if (!list) return;
+    const limit = Number(list.dataset.limit || 6);
+    const items = (data.archiveItems || [])
+      .filter((item) => item.type !== "Book")
+      .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)))
+      .slice(0, limit);
+
+    items.forEach((item) => {
+      const readLink = (item.sourceLinks || [])[0];
+      const row = document.createElement("a");
+      row.className = "archive-row";
+      row.href = readLink ? readLink.url : "archive.html";
+      if (readLink) {
+        row.target = "_blank";
+        row.rel = "noopener";
+      }
+      const source = (item.publications || [])[0] || "";
+      row.innerHTML = `
+        <span class="archive-row-meta">${source}${item.publicationDate ? ` &middot; ${item.publicationDate}` : ""}</span>
+        <h3>${item.title}</h3>
+      `;
+      list.appendChild(row);
+    });
   }
 
-  function renderColumns() {
-    const grid = qs("[data-columns-grid]");
-    if (!grid) return;
-    const columns = (data.archiveItems || [])
-      .filter((item) => item.type && item.type.toLowerCase().includes("column"))
-      .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
-    const limit = Number(grid.dataset.limit || columns.length);
-    columns.slice(0, limit).forEach((item) => grid.appendChild(createColumnCard(item)));
+  function renderLatestColumn() {
+    const mount = qs("[data-latest-column]");
+    if (!mount) return;
+    const columns = (data.archiveItems || []).filter((item) => item.type && item.type.toLowerCase().includes("column"));
+    const item = columns.find((column) => column.featured) || columns[0];
+    if (!item) return;
+
+    const readLink = (item.sourceLinks || [])[0];
+    const source = (item.publications || [])[0] || "";
+
+    mount.innerHTML = `
+      <p class="kicker">Latest Column</p>
+      <h2>${item.title}</h2>
+      <p class="byline">${source}${item.publicationDate ? ` &middot; ${item.publicationDate}` : ""}</p>
+      ${item.description ? `<p>${item.description}</p>` : ""}
+      <a class="text-link" href="${readLink ? readLink.url : "archive.html"}"${readLink ? ` target="_blank" rel="noopener"` : ""}>Read at ${source || "the archive"} &rarr;</a>
+    `;
+  }
+
+  function createPlaceholderCover(book, index) {
+    const placeholder = document.createElement("div");
+    placeholder.className = "book-placeholder";
+    const span = document.createElement("span");
+    span.textContent = String(index + 1).padStart(2, "0");
+    const strong = document.createElement("strong");
+    strong.textContent = book.title;
+    placeholder.append(span, strong);
+    return placeholder;
+  }
+
+  function createBookRow(book, index) {
+    const article = document.createElement("article");
+    article.className = "book-row";
+
+    const amazonLink = book.amazonLink
+      ? `<a class="text-link" href="${book.amazonLink}" target="_blank" rel="noopener">Buy on Amazon &rarr;</a>`
+      : "";
+    const learnMoreLink = book.learnMoreLink
+      ? `<a class="text-link" href="${book.learnMoreLink}">Learn more &rarr;</a>`
+      : "";
+
+    article.innerHTML = `
+      <div class="book-cover-wrap"></div>
+      <div class="book-copy">
+        <p class="kicker">${book.comingSoon ? "Upcoming Book" : "Book"}</p>
+        <h3>${book.title}</h3>
+        ${!book.comingSoon ? `<p class="byline">${book.year}</p>` : ""}
+        <p>${book.description}</p>
+        ${book.comingSoon && book.releaseWindow ? `<span class="tag-line">Coming Soon &middot; ${book.releaseWindow}</span>` : ""}
+        <div class="actions">${amazonLink}${learnMoreLink}</div>
+      </div>
+    `;
+
+    const coverWrap = qs(".book-cover-wrap", article);
+    if (book.coverImage) {
+      const figure = document.createElement("figure");
+      const img = document.createElement("img");
+      img.src = book.coverImage;
+      img.alt = `Cover of ${book.title}`;
+      img.loading = "lazy";
+      img.addEventListener("error", () => {
+        coverWrap.replaceChildren(createPlaceholderCover(book, index));
+      });
+      figure.appendChild(img);
+      coverWrap.appendChild(figure);
+    } else {
+      coverWrap.appendChild(createPlaceholderCover(book, index));
+    }
+
+    return article;
   }
 
   function renderBooks() {
@@ -239,38 +219,54 @@
     const excludeComingSoon = grid.hasAttribute("data-exclude-coming-soon");
     (data.books || [])
       .filter((book) => !excludeComingSoon || !book.comingSoon)
-      .forEach((book, index) => grid.appendChild(createBookCard(book, index)));
+      .forEach((book, index) => grid.appendChild(createBookRow(book, index)));
   }
 
+  function createPublicationRow(pub) {
+    const row = document.createElement("div");
+    row.className = "pub-row";
+    row.innerHTML = `
+      <div>
+        <span class="pub-name">${pub.name}</span>
+        <span class="pub-loc">${pub.location}</span>
+      </div>
+      <p class="pub-desc">${pub.description}</p>
+      ${pub.website ? `<a class="pub-visit" href="${pub.website}" target="_blank" rel="noopener">Visit site &rarr;</a>` : ""}
+    `;
+    return row;
+  }
+
+  const SCOPE_ORDER = ["Local", "Regional", "National"];
+  const SCOPE_LABEL = {
+    Local: "Home Paper & Local Outlets",
+    Regional: "Regional Syndication",
+    National: "National"
+  };
+
   function renderPublications() {
-    qsa("[data-publications-grid]").forEach((grid) => {
-      const limit = Number(grid.dataset.limit || (data.publications || []).length);
-      (data.publications || []).slice(0, limit).forEach((pub) => grid.appendChild(createPublicationCard(pub)));
+    const list = qs("[data-publications-list]");
+    if (!list) return;
+    const publications = data.publications || [];
+
+    SCOPE_ORDER.forEach((scope) => {
+      const group = publications.filter((pub) => pub.scope === scope);
+      if (!group.length) return;
+      const heading = document.createElement("h2");
+      heading.className = "pub-group-heading";
+      heading.textContent = SCOPE_LABEL[scope] || scope;
+      list.appendChild(heading);
+      const wrap = document.createElement("div");
+      wrap.className = "pub-list";
+      group.forEach((pub) => wrap.appendChild(createPublicationRow(pub)));
+      list.appendChild(wrap);
     });
   }
 
-  function createPublicationLogoCell(pub) {
-    const cell = document.createElement(pub.website ? "a" : "div");
-    cell.className = "logo-cell";
-    if (pub.website) {
-      cell.href = pub.website;
-      cell.target = "_blank";
-      cell.rel = "noopener";
-    }
-    const mark = pub.faviconUrl
-      ? `<img src="${pub.faviconUrl}" alt="" loading="lazy" onerror="var p=this.parentElement; this.remove(); p.textContent='${initials(pub.name)}';">`
-      : initials(pub.name);
-    cell.innerHTML = `
-      <span class="logo-mark" aria-hidden="true">${mark}</span>
-      <span class="logo-name">${pub.name}<span class="logo-loc">${pub.location}</span></span>
-    `;
-    return cell;
-  }
-
-  function renderPublicationLogos() {
-    qsa("[data-publications-logos]").forEach((grid) => {
-      const limit = Number(grid.dataset.limit || (data.publications || []).length);
-      (data.publications || []).slice(0, limit).forEach((pub) => grid.appendChild(createPublicationLogoCell(pub)));
+  function renderInlineCounts() {
+    qsa("[data-count-inline]").forEach((node) => {
+      const key = node.dataset.countInline;
+      const collection = data[key];
+      if (Array.isArray(collection)) node.textContent = collection.length;
     });
   }
 
@@ -282,8 +278,6 @@
     function setOpen(open) {
       toggle.setAttribute("aria-expanded", String(open));
       nav.classList.toggle("is-open", open);
-      // Locks the page behind the drawer; the class is a no-op above the
-      // breakpoint where the drawer doesn't exist.
       document.body.classList.toggle("nav-open", open);
     }
 
@@ -293,7 +287,6 @@
 
     toggle.addEventListener("click", () => setOpen(!isOpen()));
 
-    // Tapping a destination should take you there, not leave the drawer over it.
     qsa(".nav-link", nav).forEach((link) => {
       link.addEventListener("click", () => setOpen(false));
     });
@@ -311,7 +304,6 @@
       setOpen(false);
     });
 
-    // Rotating to landscape can cross the breakpoint and strand the lock.
     window.addEventListener("resize", () => {
       if (isOpen() && window.innerWidth > 960) setOpen(false);
     });
@@ -371,88 +363,6 @@
     });
   }
 
-  function setupNewsletter() {
-    const form = qs("[data-newsletter]");
-    if (!form) return;
-    const status = qs("[data-newsletter-status]");
-    const input = qs("input[type='email']", form);
-
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const value = (input && input.value ? input.value : "").trim();
-      const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-      if (!status) return;
-      if (!valid) {
-        status.textContent = "Please enter a valid email address.";
-        status.dataset.status = "error";
-        if (input) input.focus();
-        return;
-      }
-      status.textContent = "Thanks! Email updates aren't automated yet — for now, reach Luke through the contact page and he'll add you.";
-      status.dataset.status = "success";
-      form.reset();
-    });
-  }
-
-  const prefersReducedMotion = window.matchMedia
-    ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    : false;
-
-  function setupReveal() {
-    const items = qsa(".reveal");
-    if (!items.length) return;
-    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
-      items.forEach((el) => el.classList.add("is-visible"));
-      return;
-    }
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.14, rootMargin: "0px 0px -40px 0px" }
-    );
-    items.forEach((el) => observer.observe(el));
-  }
-
-  function animateCount(node) {
-    const target = parseInt(node.textContent, 10);
-    if (!Number.isFinite(target) || prefersReducedMotion) return;
-    const duration = 1100;
-    const start = performance.now();
-    node.textContent = "0";
-    function step(now) {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      node.textContent = String(Math.round(eased * target));
-      if (progress < 1) requestAnimationFrame(step);
-      else node.textContent = String(target);
-    }
-    requestAnimationFrame(step);
-  }
-
-  function setupCounters() {
-    const nodes = qsa("[data-count]");
-    if (!nodes.length) return;
-    if (prefersReducedMotion || !("IntersectionObserver" in window)) return;
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            animateCount(entry.target);
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.6 }
-    );
-    nodes.forEach((node) => observer.observe(node));
-  }
-
   function markCurrentPage() {
     const current = window.location.pathname.split("/").pop() || "index.html";
     qsa(".nav-link").forEach((link) => {
@@ -464,15 +374,12 @@
   document.addEventListener("DOMContentLoaded", () => {
     setupNavigation();
     markCurrentPage();
-    renderMetrics();
+    renderInlineCounts();
+    renderLatestColumn();
+    renderArchiveTeaser();
     renderArchive();
-    renderColumns();
     renderBooks();
     renderPublications();
-    renderPublicationLogos();
     setupContactForm();
-    setupNewsletter();
-    setupReveal();
-    setupCounters();
   });
 })();

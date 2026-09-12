@@ -203,9 +203,19 @@ window.siteData = {
       location: "Effingham, Illinois",
       type: "Newspaper",
       scope: "Regional",
-      description: "Illinois daily newspaper referenced in public search results for Luke's nationally syndicated online-culture column.",
+      description: "Illinois daily newspaper that carried Luke's nationally syndicated column on growing up online.",
       website: "https://www.effinghamdailynews.com/",
       faviconUrl: "https://www.effinghamdailynews.com/favicon.ico",
+      verified: true
+    },
+    {
+      name: "New Castle News",
+      location: "New Castle, Pennsylvania",
+      type: "Newspaper",
+      scope: "National",
+      description: "Western Pennsylvania daily newspaper that carried Luke's nationally syndicated column on growing up online.",
+      website: "https://www.ncnewsonline.com/",
+      faviconUrl: "https://www.ncnewsonline.com/favicon.ico",
       verified: true
     },
     {
@@ -341,6 +351,17 @@ window.siteData = {
   ],
   archiveItems: [
     {
+      title: "We Ran This Experiment Once Before",
+      type: "Column",
+      category: "Opinion",
+      description: "A column looking back at an idea Tahlequah has tried before, and at what actually changed the second time the community tried it again.",
+      publications: ["Tahlequah Daily Press"],
+      sourceLinks: [],
+      publicationDate: "",
+      badges: ["Opinion", "Local Government"],
+      featured: false
+    },
+    {
       title: "Six Flock Cameras in Tahlequah Too Many",
       type: "Column",
       category: "Opinion / Civil Liberties",
@@ -470,10 +491,14 @@ window.siteData = {
       type: "Nationally Syndicated Column",
       category: "Technology / Culture / Opinion",
       description: "A nationally distributed column examining technology, social media, identity, online culture, and the long-term effects of growing up in a permanently connected world.",
-      publications: ["Tahlequah Daily Press", "The Tribune-Democrat", "The Register-Herald", "The Huntsville Item", "Pharos-Tribune", "Effingham Daily News", "Yahoo Life", "The Herald / Sharon Herald"],
+      publications: ["Tahlequah Daily Press", "New Castle News", "Effingham Daily News", "The Sharon Herald", "The Tribune-Democrat", "Cleburne Times-Review", "The Register-Herald", "The Huntsville Item", "Pharos-Tribune", "Yahoo Life"],
       sourceLinks: [
         { label: "Tahlequah Daily Press", url: "https://www.tahlequahdailypress.com/opinion/column-the-cost-of-growing-up-online/article_e61ecb65-b14d-4b2c-b6fc-ab4d927dc558.html" },
+        { label: "New Castle News", url: "https://www.ncnewsonline.com/opinion/columns/column-by-luke-johnson-the-cost-of-growing-up-online/article_9c511a5e-f702-546b-985e-8348d4984ffc.html" },
+        { label: "Effingham Daily News", url: "https://www.effinghamdailynews.com/opinion/columns/the-cost-of-growing-up-online/article_ee0fd78a-592d-5e56-bae6-9bae5120cefb.html" },
+        { label: "The Sharon Herald", url: "https://www.sharonherald.com/cnhi_network/johnson-the-cost-of-growing-up-online/article_ed56642f-511f-577b-ac9b-2be31de1d91f.html" },
         { label: "The Tribune-Democrat", url: "https://www.tribdem.com/news/local_news/kids-screens-luke-johnson-the-cost-of-growing-up-online/article_3b85bb88-1edc-4136-b1b1-db02bf312b9e.html" },
+        { label: "Cleburne Times-Review", url: "https://www.cleburnetimesreview.com/cnhi_network/luke-johnson-the-cost-of-growing-up-online/article_35d9bddb-4df9-5ebc-a575-5ef66f4edc14.html" },
         { label: "The Register-Herald", url: "https://www.register-herald.com/cnhi_network/the-cost-of-growing-up-online/article_cbe6dbfd-5f00-5053-a612-af7a6b0c8bf4.html" },
         { label: "The Huntsville Item", url: "https://www.itemonline.com/cnhi_network/the-cost-of-growing-up-online/article_772c3805-2bcd-5928-9814-4989cd586cb7.html" },
         { label: "Pharos-Tribune", url: "https://www.pharostribune.com/opinion/article_1585f7f8-11fa-5b57-b52a-61f4709d7946.html" }
@@ -490,6 +515,7 @@ window.siteData = {
       publications: ["Tahlequah Daily Press", "Muskogee Phoenix", "Enid News & Eagle", "Stilwell Democrat Journal", "Norman Transcript", "Pauls Valley Democrat", "Ada News", "McAlester News-Capital", "The Duncan Banner", "Stillwater News Press", "The Express-Star"],
       sourceLinks: [
         { label: "Tahlequah Daily Press", url: "https://www.tahlequahdailypress.com/opinion/column-education-needs-balance-not-bans/article_966579b7-63bc-4359-ad7c-af643f6c4a95.html" },
+        { label: "Stilwell Democrat Journal", url: "https://www.stilwelldemocrat.com/opinion/column-education-needs-balance-not-bans/article_01d03ff5-dc90-5442-b803-441cc4fda214.html" },
         { label: "Enid News & Eagle", url: "https://www.enidnews.com/opinion/column-education-needs-balance-not-bans/article_a8f2c7d2-06f0-5546-8213-e9a6fab2e799.html" },
         { label: "The Duncan Banner", url: "https://www.duncanbanner.com/opinion/column-education-needs-balance-not-bans/article_b5109af8-40a4-5d22-a45f-0d7c481152fa.html" },
         { label: "The Express-Star", url: "https://www.chickashanews.com/opinion/column-education-needs-balance-not-bans/article_9fa9ad28-d1c2-539c-baff-4e1224e20cb7.html" },
@@ -548,8 +574,9 @@ window.siteData = {
       type: "Feature",
       category: "Technology / Youth",
       description: "A national roundtable feature where Luke participated in a discussion about teenagers, technology, and growing up with screens.",
-      publications: ["CNHI News Service", "News and Tribune", "The Herald Bulletin", "The Huntsville Item", "Tahlequah Daily Press", "Yahoo Life"],
+      publications: ["CNHI News Service", "The Tribune-Democrat", "News and Tribune", "The Herald Bulletin", "The Huntsville Item", "Tahlequah Daily Press", "Yahoo Life"],
       sourceLinks: [
+        { label: "The Tribune-Democrat", url: "https://www.tribdem.com/news/kids-screens-students-grow-evolve-in-digital-world/article_d0c94197-b1a1-5170-b065-38618d93e890.html" },
         { label: "News and Tribune", url: "https://www.newsandtribune.com/news/students-grow-evolve-in-a-digital-world/article_6e04978e-92a3-4411-990b-15eaead105a0.html" },
         { label: "The Herald Bulletin", url: "https://www.heraldbulletin.com/news/state_news/students-grow-evolve-in-a-digital-world/article_638897f7-e1ca-404f-86eb-a40e19acac33.html" },
         { label: "The Huntsville Item", url: "https://www.itemonline.com/cnhi_network/students-grow-evolve-in-a-digital-world/article_a7f28e2a-73f8-55ac-8737-476c699fd3a3.html" }
