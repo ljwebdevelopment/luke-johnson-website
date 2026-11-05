@@ -49,6 +49,16 @@ window.siteData = {
       verified: true
     },
     {
+      name: "Tulsa World",
+      location: "Tulsa, Oklahoma",
+      type: "Newspaper",
+      scope: "Regional",
+      description: "Oklahoma's second-largest daily newspaper, which published Luke's op-ed on young people and the 2026 election.",
+      website: "https://tulsaworld.com/",
+      faviconUrl: "https://tulsaworld.com/favicon.ico",
+      verified: true
+    },
+    {
       name: "Northeastern Journal",
       location: "Tahlequah, Oklahoma",
       type: "Newspaper",
@@ -340,6 +350,19 @@ window.siteData = {
     }
   ],
   archiveItems: [
+    {
+      title: "I Cannot Vote Yet, But This Election Is Already About Me",
+      type: "Column",
+      category: "Opinion / Politics",
+      description: "An op-ed written from the perspective of a 15-year-old student on how the policy decisions made in a major election shape the future, education, and daily lives of America's young people \u2014 even though they are not yet old enough to cast a ballot.",
+      publications: ["Tulsa World"],
+      sourceLinks: [
+        { label: "Tulsa World", url: "https://tulsaworld.com/opinion/column/article_0822648c-8059-4ec1-b875-564c4e846c5e.html" }
+      ],
+      publicationDate: "Nov. 3, 2026",
+      badges: ["Opinion", "Politics", "Elections", "Youth Issues"],
+      featured: true
+    },
     {
       title: "Six Flock Cameras in Tahlequah Too Many",
       type: "Column",
