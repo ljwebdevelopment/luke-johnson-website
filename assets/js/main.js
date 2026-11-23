@@ -1,56 +1,40 @@
-// Renders every data-driven block on lukehjohnson.com from window.siteData
-// (assets/js/archiveData.js). Each page includes only the hooks it needs.
+// Page behavior for lukehjohnson.com.
+// The data-driven blocks are written into the HTML by scripts/build.js so
+// crawlers see them; this re-renders them from window.siteData on load so
+// the live site always matches assets/js/archiveData.js, then wires up the
+// writing-page search, the menu, and the contact form.
 (function () {
   "use strict";
 
   const data = window.siteData || {};
-  const books = data.books || [];
-  const outlets = data.publications || [];
-  // Books live on the books page, so the writing list leaves them out.
-  const writing = (data.archiveItems || []).filter((item) => !/book/i.test(item.type || ""));
+  const render = window.siteRender;
 
   const qs = (selector, scope = document) => scope.querySelector(selector);
   const qsa = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
 
-  const isColumn = (item) => /column/i.test(item.type || "");
-  const isFeature = (item) => /feature/i.test(item.type || "");
-  const stateOf = (outlet) => {
-    const parts = String(outlet.location || "").split(",");
-    return (parts[1] || parts[0] || "").trim() || "Other";
-  };
-
-  function external(url) {
-    return /^https?:/i.test(url) ? ` target="_blank" rel="noopener"` : "";
+  function fill(selector, markup) {
+    qsa(selector).forEach((node) => {
+      node.innerHTML = typeof markup === "function" ? markup(node) : markup;
+    });
   }
 
-  // Cover photo for a piece, when archiveData.js lists one.
-  function photo(item, className) {
-    if (!item.image) return "";
-    return `<figure class="${className}"><img src="${item.image}" alt="" loading="lazy" decoding="async"></figure>`;
-  }
-
-  function metaLine(parts) {
-    return parts.filter(Boolean).join(`<span class="dot" aria-hidden="true">/</span>`);
-  }
-
-  // ---------- Metrics ----------
-
-  function metrics() {
-    const states = new Set(outlets.map(stateOf).filter((s) => s !== "National"));
-    return {
-      columns: writing.filter(isColumn).length,
-      outlets: outlets.length,
-      states: states.size,
-      books: books.filter((book) => !book.comingSoon).length
-    };
-  }
-
-  function renderMetrics() {
-    const values = metrics();
+  function renderBlocks() {
+    if (!render) return;
+    const values = render.metrics(data);
     qsa("[data-metric]").forEach((node) => {
       const key = node.dataset.metric;
       if (key in values) node.textContent = values[key];
     });
+    fill("[data-lead]", render.lead(data));
+    fill("[data-secondary]", render.secondary(data));
+    fill("[data-headline-index]", (node) =>
+      render.headlineIndex(data, Number(node.dataset.start || 0), Number(node.dataset.limit || 999))
+    );
+    fill("[data-outlet-roll]", render.outletRoll(data));
+    fill("[data-shelf]", render.shelf(data));
+    fill("[data-book-rows]", render.bookRows(data));
+    fill("[data-entries]", render.entries(data));
+    fill("[data-directory]", render.directory(data));
   }
 
   function renderDate() {
@@ -64,144 +48,12 @@
     });
   }
 
-  // ---------- Home: front page ----------
+  // ---------- Writing page search and filters ----------
 
-  function renderLead() {
-    const node = qs("[data-lead]");
-    if (!node || !writing.length) return;
-    const item = writing[0];
-    const outlet = (item.publications || [])[0];
-    node.innerHTML = `
-      ${photo(item, "lead-photo")}
-      <p class="kicker">Latest ${isColumn(item) ? "column" : "work"}</p>
-      <h2 class="lead-title">${item.title}</h2>
-      ${item.description ? `<p class="lead-deck">${item.description}</p>` : ""}
-      <p class="meta">${metaLine([outlet, item.publicationDate])}</p>
-      <div class="btn-row">
-        <a class="btn" href="writing.html">All writing</a>
-      </div>
-    `;
-  }
-
-  function storyMarkup(item) {
-    const outlet = (item.publications || [])[0];
-    return `
-      <article class="story">
-        ${photo(item, "story-photo")}
-        <p class="kicker">${outlet || item.type}</p>
-        <h3 class="story-title">${item.title}</h3>
-        ${item.description ? `<p>${item.description}</p>` : ""}
-        <p class="meta">${metaLine([item.publicationDate, (item.publications || []).length > 1 ? `${item.publications.length} outlets` : ""])}</p>
-      </article>
-    `;
-  }
-
-  function renderSecondary() {
-    const node = qs("[data-secondary]");
-    if (!node) return;
-    node.innerHTML = writing.slice(1, 3).map(storyMarkup).join("");
-  }
-
-  function renderHeadlineIndex() {
-    qsa("[data-headline-index]").forEach((list) => {
-      const start = Number(list.dataset.start || 0);
-      const limit = Number(list.dataset.limit || writing.length);
-      list.innerHTML = writing
-        .slice(start, start + limit)
-        .map((item) => {
-          return `
-            <li${item.image ? ` class="has-thumb"` : ""}>
-              <h3>${item.title}</h3>
-              <p class="meta">${metaLine([(item.publications || [])[0], item.publicationDate])}</p>
-              ${photo(item, "index-thumb")}
-            </li>
-          `;
-        })
-        .join("");
-    });
-  }
-
-  function renderOutletRoll() {
-    qsa("[data-outlet-roll]").forEach((node) => {
-      node.innerHTML = outlets
-        .map((outlet) => `<a href="${outlet.website}"${external(outlet.website)}>${outlet.name}</a>`)
-        .join(` <span class="sep" aria-hidden="true">/</span> `);
-    });
-  }
-
-  function renderShelf() {
-    qsa("[data-shelf]").forEach((node) => {
-      node.innerHTML = books
-        .filter((book) => !book.comingSoon)
-        .map((book) => `
-          <article class="shelf-book">
-            <img src="${book.coverImage}" alt="Cover of ${book.title}" width="342" height="445" loading="lazy">
-            <div>
-              <p class="kicker">Book</p>
-              <h3>${book.title}</h3>
-              <p>${book.description}</p>
-              ${book.amazonLink ? `<a class="more-link" href="${book.amazonLink}" target="_blank" rel="noopener">Buy on Amazon</a>` : ""}
-            </div>
-          </article>
-        `)
-        .join("");
-    });
-  }
-
-  // ---------- Books page ----------
-
-  function renderBookRows() {
-    qsa("[data-book-rows]").forEach((node) => {
-      node.innerHTML = books
-        .filter((book) => !book.comingSoon)
-        .map((book) => `
-          <article class="book-row">
-            <div class="book-covers">
-              ${book.coverImage ? `<figure><img src="${book.coverImage}" alt="Front cover of ${book.title}" width="342" height="445" loading="lazy"><figcaption class="meta">Front</figcaption></figure>` : ""}
-              ${book.backCoverImage ? `<figure><img src="${book.backCoverImage}" alt="Back cover of ${book.title}" width="342" height="445" loading="lazy"><figcaption class="meta">Back</figcaption></figure>` : ""}
-            </div>
-            <div>
-              <p class="kicker">Nonfiction</p>
-              <h3>${book.title}</h3>
-              <p>${book.description}</p>
-              ${book.amazonLink ? `<div class="btn-row"><a class="btn" href="${book.amazonLink}" target="_blank" rel="noopener">Buy on Amazon</a></div>` : ""}
-            </div>
-          </article>
-        `)
-        .join("");
-    });
-  }
-
-  // ---------- Writing page ----------
-
-  function entryMarkup(item) {
-    const outlets = item.publications || [];
-    return `
-      <li class="entry${item.image ? " has-photo" : ""}" data-kind="${isColumn(item) ? "column" : isFeature(item) ? "feature" : "other"}">
-        <div class="entry-side">
-          <span class="kicker">${item.type}</span>
-          ${item.publicationDate ? `<span class="meta">${item.publicationDate}</span>` : ""}
-        </div>
-        <div>
-          <h2 class="entry-title">${item.title}</h2>
-          ${item.description ? `<p class="entry-desc">${item.description}</p>` : ""}
-          ${outlets.length ? `<p class="entry-also">Ran in ${outlets.join(", ")}.</p>` : ""}
-        </div>
-        ${photo(item, "entry-photo")}
-      </li>
-    `;
-  }
-
-  function renderEntries() {
+  function setupWritingFilters() {
     const list = qs("[data-entries]");
     if (!list) return;
-
-    list.innerHTML = writing.map(entryMarkup).join("");
     const entries = qsa(".entry", list);
-    entries.forEach((entry, index) => {
-      entry.dataset.search = JSON.stringify(writing[index]).toLowerCase();
-    });
-
     const search = qs("[data-search]");
     const filters = qsa("[data-filter]");
     const count = qs("[data-result-count]");
@@ -209,13 +61,13 @@
 
     function apply() {
       const query = (search ? search.value : "").toLowerCase().trim();
-      const active = (filters.find((btn) => btn.getAttribute("aria-pressed") === "true") || {}).dataset;
-      const kind = active ? active.filter : "all";
+      const active = filters.find((btn) => btn.getAttribute("aria-pressed") === "true");
+      const kind = active ? active.dataset.filter : "all";
       let shown = 0;
       entries.forEach((entry) => {
         const visible =
           (kind === "all" || entry.dataset.kind === kind) &&
-          (!query || entry.dataset.search.includes(query));
+          (!query || (entry.dataset.search || "").includes(query));
         entry.hidden = !visible;
         if (visible) shown += 1;
       });
@@ -236,37 +88,6 @@
       search.addEventListener("input", apply);
     }
     apply();
-  }
-
-  function renderDirectory() {
-    const node = qs("[data-directory]");
-    if (!node) return;
-    const groups = new Map();
-    outlets.forEach((outlet) => {
-      const state = stateOf(outlet);
-      if (!groups.has(state)) groups.set(state, []);
-      groups.get(state).push(outlet);
-    });
-    // Home state first, then national outlets, then everyone else by size.
-    const order = Array.from(groups.keys()).sort((a, b) => {
-      const rank = (s) => (s === "Oklahoma" ? 0 : s === "National" ? 1 : 2);
-      return rank(a) - rank(b) || groups.get(b).length - groups.get(a).length || a.localeCompare(b);
-    });
-    node.innerHTML = order
-      .map((state) => `
-        <section class="directory-group">
-          <h3>${state}<span>${groups.get(state).length}</span></h3>
-          <ul>
-            ${groups.get(state).map((outlet) => `
-              <li>
-                <a href="${outlet.website}" target="_blank" rel="noopener">${outlet.name}</a>
-                <span>${state === "National" ? outlet.type : outlet.location.split(",")[0]}</span>
-              </li>
-            `).join("")}
-          </ul>
-        </section>
-      `)
-      .join("");
   }
 
   // ---------- Chrome ----------
@@ -360,15 +181,8 @@
     setupNav();
     markCurrentPage();
     renderDate();
-    renderMetrics();
-    renderLead();
-    renderSecondary();
-    renderHeadlineIndex();
-    renderOutletRoll();
-    renderShelf();
-    renderBookRows();
-    renderEntries();
-    renderDirectory();
+    renderBlocks();
+    setupWritingFilters();
     setupContactForm();
   });
 })();

@@ -1,4 +1,4 @@
-// Primary content database for Luke Johnson.
+// Primary content database for Luke H. Johnson. Run `node scripts/build.js` after editing.
 // Each archive item may set `image` (a cover photo path) to show with it.
 // Update publication links, favicons, article source links, book covers, and verification notes here.
 window.siteData = {
@@ -15,7 +15,7 @@ window.siteData = {
       releaseWindow: "",
       coverImage: "assets/images/dead-air-america-cover-web.jpg",
       backCoverImage: "",
-      description: "Luke Johnson's upcoming nonfiction book about growing up in a country where trust in institutions — media, politics, education, and technology — already feels fractured. Written from the perspective of a young American watching these systems shape his generation in real time, it explores the noise, pressure, and confusion of modern life while asking what it means to find a voice in a country that often feels like it has stopped listening.",
+      description: "Luke H. Johnson's upcoming nonfiction book about growing up in a country where trust in institutions — media, politics, education, and technology — already feels fractured. Written from the perspective of a young American watching these systems shape his generation in real time, it explores the noise, pressure, and confusion of modern life while asking what it means to find a voice in a country that often feels like it has stopped listening.",
       amazonLink: "",
       learnMoreLink: "books.html#dead-air-america"
     },
