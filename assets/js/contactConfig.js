@@ -1,5 +1,6 @@
-// Paste your deployed Google Apps Script Web App URL here.
-// Example: "https://script.google.com/macros/s/AKfycb.../exec"
+// Contact form endpoint from Formspree (formspree.io > your form > Integration).
+// It looks like "https://formspree.io/f/abcdwxyz". The form ID is public by
+// design: it only lets people send you messages, not read them.
 window.contactFormConfig = {
-  googleAppsScriptUrl: ""
+  formspreeEndpoint: ""
 };
