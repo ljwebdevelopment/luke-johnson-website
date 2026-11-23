@@ -25,7 +25,12 @@
 
   function primaryLink(item) {
     const link = (item.sourceLinks || [])[0];
-    return link ? link.url : "writing.html";
+    return link ? link.url : "";
+  }
+
+  // Headline text, linked to the article when there is one online.
+  function headline(item, href) {
+    return href ? `<a href="${href}"${external(href)}>${item.title}</a>` : item.title;
   }
 
   function metaLine(parts) {
@@ -73,11 +78,11 @@
     const href = primaryLink(item);
     node.innerHTML = `
       <p class="kicker">Latest ${isColumn(item) ? "column" : "work"}</p>
-      <h2 class="lead-title"><a href="${href}"${external(href)}>${item.title}</a></h2>
+      <h2 class="lead-title">${headline(item, href)}</h2>
       ${item.description ? `<p class="lead-deck">${item.description}</p>` : ""}
       <p class="meta">${metaLine([outlet, item.publicationDate])}</p>
       <div class="btn-row">
-        <a class="btn" href="${href}"${external(href)}>Read it${outlet ? ` in ${outlet.replace(/^The /, "the ")}` : ""}</a>
+        ${href ? `<a class="btn" href="${href}"${external(href)}>Read it${outlet ? ` in ${outlet.replace(/^The /, "the ")}` : ""}</a>` : ""}
         <a class="btn btn-ghost" href="writing.html">All writing</a>
       </div>
     `;
@@ -89,7 +94,7 @@
     return `
       <article class="story">
         <p class="kicker">${outlet || item.type}</p>
-        <h3 class="story-title"><a href="${href}"${external(href)}>${item.title}</a></h3>
+        <h3 class="story-title">${headline(item, href)}</h3>
         ${item.description ? `<p>${item.description}</p>` : ""}
         <p class="meta">${metaLine([item.publicationDate, (item.publications || []).length > 1 ? `${item.publications.length} outlets` : ""])}</p>
       </article>
@@ -112,7 +117,7 @@
           const href = primaryLink(item);
           return `
             <li>
-              <h3><a href="${href}"${external(href)}>${item.title}</a></h3>
+              <h3>${headline(item, href)}</h3>
               <p class="meta">${metaLine([(item.publications || [])[0], item.publicationDate])}</p>
             </li>
           `;
@@ -186,7 +191,7 @@
           ${item.publicationDate ? `<span class="meta">${item.publicationDate}</span>` : ""}
         </div>
         <div>
-          <h2 class="entry-title"><a href="${href}"${external(href)}>${item.title}</a></h2>
+          <h2 class="entry-title">${headline(item, href)}</h2>
           ${item.description ? `<p class="entry-desc">${item.description}</p>` : ""}
           ${links.length ? `<p class="entry-links"><span class="meta">Read it in</span>${links.map((link) => `<a href="${link.url}" target="_blank" rel="noopener">${link.label}</a>`).join("")}</p>` : ""}
           ${unlinked.length ? `<p class="entry-also">${links.length ? "Also ran in" : "Ran in"} ${unlinked.join(", ")}.</p>` : ""}

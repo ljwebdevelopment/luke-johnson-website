@@ -347,14 +347,98 @@ window.siteData = {
       website: "https://www.alliednews.com/",
       faviconUrl: "https://www.alliednews.com/favicon.ico",
       verified: true
+    },
+    {
+      name: "New Castle News",
+      location: "New Castle, Pennsylvania",
+      type: "Newspaper",
+      scope: "Regional",
+      description: "Western Pennsylvania daily newspaper that ran Luke's column on growing up online.",
+      website: "https://www.ncnewsonline.com/",
+      faviconUrl: "https://www.ncnewsonline.com/favicon.ico",
+      verified: true
     }
   ],
   archiveItems: [
     {
+      title: "What the Next Governor Owes Oklahoma's Kids",
+      type: "Column",
+      category: "Opinion / Education",
+      description: "The priorities in education, technology, and economic opportunity that incoming Governor Mike Mazzei should take up for Oklahoma's students.",
+      publications: ["Enid News & Eagle"],
+      sourceLinks: [],
+      publicationDate: "Nov. 16, 2026",
+      badges: ["Opinion", "Education", "Politics", "Youth Issues"],
+      featured: true
+    },
+    {
+      title: "Test Score Shouldn't Determine Kid's Whole Year",
+      type: "Column",
+      category: "Opinion / Education",
+      description: "A critique of the retention mandate in Oklahoma's Strong Readers Act, arguing that a single timed test score should not hold back thousands of third graders.",
+      publications: ["Allied News"],
+      sourceLinks: [],
+      publicationDate: "Nov. 15, 2026",
+      badges: ["Opinion", "Education", "Policy"],
+      featured: true
+    },
+    {
+      title: "What Is Politics?",
+      type: "Column",
+      category: "Opinion / Politics",
+      description: "What politics actually means to young people who feel disconnected from the partisan noise of a midterm election cycle.",
+      publications: ["Northeastern Journal"],
+      sourceLinks: [
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/author/luke-johnson" }
+      ],
+      publicationDate: "Nov. 13, 2026",
+      badges: ["Opinion", "Politics", "Youth Issues"],
+      featured: false
+    },
+    {
+      title: "What Veterans Day Means When You're Fifteen",
+      type: "Column",
+      category: "Opinion",
+      description: "Looking past a day off from school to what military service and sacrifice mean to a teenager today.",
+      publications: ["Northeastern Journal"],
+      sourceLinks: [
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/author/luke-johnson" }
+      ],
+      publicationDate: "Nov. 11, 2026",
+      badges: ["Opinion", "Youth Issues"],
+      featured: false
+    },
+    {
+      title: "If You've Been There for Years, Where Is the Change?",
+      type: "Column",
+      category: "Opinion / Politics",
+      description: "A call for voters to measure long-serving incumbents by their actual legislative records rather than by repeated campaign promises of \"big change.\"",
+      publications: ["Northeastern Journal"],
+      sourceLinks: [
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/author/luke-johnson" }
+      ],
+      publicationDate: "Nov. 7, 2026",
+      badges: ["Opinion", "Politics", "Elections"],
+      featured: false
+    },
+    {
+      title: "What Oklahoma Almost Had",
+      type: "Column",
+      category: "Politics",
+      description: "A reflection on Oklahoma's November 2026 election results and the competing visions for the state's future that were decided on Election Night.",
+      publications: ["Northeastern Journal"],
+      sourceLinks: [
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/article/politics/what-oklahoma-almost-had" }
+      ],
+      publicationDate: "Nov. 4, 2026",
+      badges: ["Politics", "Elections", "Oklahoma"],
+      featured: false
+    },
+    {
       title: "I Cannot Vote Yet, But This Election Is Already About Me",
       type: "Column",
       category: "Opinion / Politics",
-      description: "An op-ed written from the perspective of a 15-year-old student on how the policy decisions made in a major election shape the future, education, and daily lives of America's young people \u2014 even though they are not yet old enough to cast a ballot.",
+      description: "An op-ed written from the perspective of a 15-year-old student on how the policy decisions made in a major election shape the future, education, and daily lives of America's young people — even though they are not yet old enough to cast a ballot.",
       publications: ["Tulsa World"],
       sourceLinks: [
         { label: "Tulsa World", url: "https://tulsaworld.com/opinion/column/article_0822648c-8059-4ec1-b875-564c4e846c5e.html" }
@@ -364,10 +448,47 @@ window.siteData = {
       featured: true
     },
     {
+      title: "Are We Happy With Where We Are?",
+      type: "Column",
+      category: "Opinion / Politics",
+      description: "An appeal to Oklahomans across party lines to step back from partisan labels and honestly ask whether the country is heading in the right direction.",
+      publications: ["CNHI News Service", "Tahlequah Daily Press", "The Huntsville Item"],
+      sourceLinks: [],
+      publicationDate: "Oct. 23–25, 2026",
+      badges: ["Opinion", "Politics", "Civic Engagement"],
+      featured: false
+    },
+    {
+      title: "Shame On You, Cornell",
+      type: "Column",
+      category: "Opinion",
+      description: "A critique of Cornell University's institutional response to campus sexual assault allegations following the 2024 Chi Phi fraternity incident.",
+      publications: ["Northeastern Journal"],
+      sourceLinks: [
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/article/opinion/shame-on-you-cornell" }
+      ],
+      publicationDate: "Oct. 3, 2026",
+      badges: ["Opinion", "Education"],
+      featured: false
+    },
+    {
+      title: "Inherited Certainty",
+      type: "Column",
+      category: "Opinion",
+      description: "A challenge to question the political and cultural beliefs handed down to us rather than accepting inherited viewpoints uncritically.",
+      publications: ["Northeastern Journal"],
+      sourceLinks: [
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/author/luke-johnson" }
+      ],
+      publicationDate: "Sept. 11, 2026",
+      badges: ["Opinion", "Politics", "Culture"],
+      featured: false
+    },
+    {
       title: "Six Flock Cameras in Tahlequah Too Many",
       type: "Column",
       category: "Opinion / Civil Liberties",
-      description: "A column on the six Flock Safety license-plate readers now watching the roads into Tahlequah \u2014 and on what it means when the surveillance a teenager once thought of as a big-city problem turns up two minutes from his house.",
+      description: "A column on the six Flock Safety license-plate readers now watching the roads into Tahlequah — and on what it means when the surveillance a teenager once thought of as a big-city problem turns up two minutes from his house.",
       publications: ["Tahlequah Daily Press", "CNHI News Service"],
       sourceLinks: [
         { label: "Tahlequah Daily Press", url: "https://www.tahlequahdailypress.com/opinion/column-six-flock-cameras-in-tahlequah-too-many/article_538df285-7dba-44d9-807b-2067477c1af3.html" },
@@ -376,6 +497,45 @@ window.siteData = {
       publicationDate: "Aug. 21, 2026",
       badges: ["Opinion", "Privacy", "Civil Liberties", "Local Government"],
       featured: true
+    },
+    {
+      title: "The Strange Experience of Outgrowing Yourself",
+      type: "Column",
+      category: "Opinion",
+      description: "On the realization of maturing quickly and growing past earlier versions of your own identity and perspective.",
+      publications: ["Northeastern Journal"],
+      sourceLinks: [
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/article/local-news/the-strange-experience-of-outgrowing-yourself" }
+      ],
+      publicationDate: "Aug. 13, 2026",
+      badges: ["Opinion", "Youth Issues"],
+      featured: false
+    },
+    {
+      title: "On Being Someone's Twin",
+      type: "Column",
+      category: "Editorial",
+      description: "Growing up alongside his twin brother, Jaren, and pushing past the stereotypes that treat twins as a matched set rather than two distinct people.",
+      publications: ["Northeastern Journal"],
+      sourceLinks: [
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/article/editorial/on-being-someones-twin" }
+      ],
+      publicationDate: "Aug. 3, 2026",
+      badges: ["Editorial", "Identity"],
+      featured: false
+    },
+    {
+      title: "Nobody's Asking Us",
+      type: "Column",
+      category: "Politics",
+      description: "How political decisions are routinely made about young people without inviting them into the conversation.",
+      publications: ["Northeastern Journal"],
+      sourceLinks: [
+        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/article/politics/nobodys-asking-us" }
+      ],
+      publicationDate: "July 31, 2026",
+      badges: ["Politics", "Youth Issues"],
+      featured: false
     },
     {
       title: "A Week at Yale With Community's Help",
@@ -424,19 +584,6 @@ window.siteData = {
       featured: false
     },
     {
-      title: "Nobody's Asking Us",
-      type: "Column",
-      category: "Politics",
-      description: "",
-      publications: ["Northeastern Journal"],
-      sourceLinks: [
-        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/article/politics/nobodys-asking-us" }
-      ],
-      publicationDate: "",
-      badges: ["Politics"],
-      featured: false
-    },
-    {
       title: "Coming of Age During a War Nobody Declared",
       type: "Column",
       category: "Opinion",
@@ -463,47 +610,63 @@ window.siteData = {
       featured: false
     },
     {
-      title: "On Being Someone's Twin",
-      type: "Column",
-      category: "Editorial",
-      description: "",
-      publications: ["Northeastern Journal"],
-      sourceLinks: [
-        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/article/editorial/on-being-someones-twin" }
-      ],
-      publicationDate: "",
-      badges: ["Editorial"],
-      featured: false
-    },
-    {
-      title: "The Strange Experience of Outgrowing Yourself",
-      type: "Column",
-      category: "Opinion",
-      description: "",
-      publications: ["Northeastern Journal"],
-      sourceLinks: [
-        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/article/local-news/the-strange-experience-of-outgrowing-yourself" }
-      ],
-      publicationDate: "",
-      badges: ["Opinion"],
-      featured: false
-    },
-    {
       title: "The Cost of Growing Up Online",
       type: "Nationally Syndicated Column",
       category: "Technology / Culture / Opinion",
       description: "A nationally distributed column examining technology, social media, identity, online culture, and the long-term effects of growing up in a permanently connected world.",
-      publications: ["Tahlequah Daily Press", "The Tribune-Democrat", "The Register-Herald", "The Huntsville Item", "Pharos-Tribune", "Effingham Daily News", "Yahoo Life", "The Herald / Sharon Herald"],
+      publications: ["Tahlequah Daily Press", "The Tribune-Democrat", "The Register-Herald", "The Huntsville Item", "Pharos-Tribune", "Effingham Daily News", "Yahoo Life", "The Herald / Sharon Herald", "Norman Transcript", "New Castle News"],
       sourceLinks: [
         { label: "Tahlequah Daily Press", url: "https://www.tahlequahdailypress.com/opinion/column-the-cost-of-growing-up-online/article_e61ecb65-b14d-4b2c-b6fc-ab4d927dc558.html" },
         { label: "The Tribune-Democrat", url: "https://www.tribdem.com/news/local_news/kids-screens-luke-johnson-the-cost-of-growing-up-online/article_3b85bb88-1edc-4136-b1b1-db02bf312b9e.html" },
         { label: "The Register-Herald", url: "https://www.register-herald.com/cnhi_network/the-cost-of-growing-up-online/article_cbe6dbfd-5f00-5053-a612-af7a6b0c8bf4.html" },
         { label: "The Huntsville Item", url: "https://www.itemonline.com/cnhi_network/the-cost-of-growing-up-online/article_772c3805-2bcd-5928-9814-4989cd586cb7.html" },
-        { label: "Pharos-Tribune", url: "https://www.pharostribune.com/opinion/article_1585f7f8-11fa-5b57-b52a-61f4709d7946.html" }
+        { label: "Pharos-Tribune", url: "https://www.pharostribune.com/opinion/article_1585f7f8-11fa-5b57-b52a-61f4709d7946.html" },
+        { label: "New Castle News", url: "https://www.ncnewsonline.com/opinion/columns/column-by-luke-johnson-the-cost-of-growing-up-online/article_9c511a5e-f702-546b-985e-8348d4984ffc.html" }
       ],
-      publicationDate: "Submitted May 21, 2026",
+      publicationDate: "May 2026",
       badges: ["Nationally Syndicated", "Opinion", "Technology", "Culture", "Youth Issues"],
       featured: true
+    },
+    {
+      title: "Students Grow, Evolve in a Digital World",
+      type: "Feature",
+      category: "Technology / Youth",
+      description: "A national roundtable feature where Luke participated in a discussion about teenagers, technology, and growing up with screens.",
+      publications: ["CNHI News Service", "News and Tribune", "The Herald Bulletin", "The Huntsville Item", "Tahlequah Daily Press", "Yahoo Life"],
+      sourceLinks: [
+        { label: "News and Tribune", url: "https://www.newsandtribune.com/news/students-grow-evolve-in-a-digital-world/article_6e04978e-92a3-4411-990b-15eaead105a0.html" },
+        { label: "The Herald Bulletin", url: "https://www.heraldbulletin.com/news/state_news/students-grow-evolve-in-a-digital-world/article_638897f7-e1ca-404f-86eb-a40e19acac33.html" },
+        { label: "The Huntsville Item", url: "https://www.itemonline.com/cnhi_network/students-grow-evolve-in-a-digital-world/article_a7f28e2a-73f8-55ac-8737-476c699fd3a3.html" }
+      ],
+      publicationDate: "May 2026",
+      badges: ["Feature", "Technology", "Youth Issues", "Culture"],
+      featured: false
+    },
+    {
+      title: "Reactions to Student Protests Discouraging",
+      type: "Column",
+      category: "Opinion / Civic Engagement",
+      description: "A column discussing public reactions to student activism, civic engagement, and youth participation in political and social issues.",
+      publications: ["Tahlequah Daily Press", "Muskogee Phoenix", "The Huntsville Item"],
+      sourceLinks: [],
+      publicationDate: "Submitted Mar. 5, 2026",
+      badges: ["Opinion", "Civic Engagement", "Politics", "Youth Issues"],
+      featured: false
+    },
+    {
+      title: "The Pressure Teens Carry in Today's World",
+      type: "Column",
+      category: "Opinion / Society",
+      description: "A column examining mental health, expectations, social pressure, academics, technology, and the realities many teenagers face today.",
+      publications: ["Tahlequah Daily Press", "The Express-Star", "Muskogee Phoenix", "The Daily Star", "Ada News", "The Lebanon Reporter", "The Huntsville Item"],
+      sourceLinks: [
+        { label: "The Daily Star", url: "https://www.thedailystar.com/opinion/columns/the-pressure-teens-are-carrying-in-todays-world/article_cce2496d-2d39-43bd-8773-a6dc7c621a51.html" },
+        { label: "Ada News", url: "https://www.theadanews.com/opinion/guest-column-the-pressure-teens-carry-in-todays-world/article_7c246e6e-1732-54c4-9905-0cf6fbd807f7.html" },
+        { label: "The Lebanon Reporter", url: "https://www.reporter.net/opinion/column-the-pressure-teens-carry-in-todays-world/article_e9a8a882-8fc4-5831-b1dd-d7d19dd8d12e.html" }
+      ],
+      publicationDate: "Submitted Dec. 22, 2025",
+      badges: ["Opinion", "Society", "Youth Issues", "Culture"],
+      featured: false
     },
     {
       title: "Education Needs Balance, Not Bans",
@@ -525,36 +688,10 @@ window.siteData = {
       featured: true
     },
     {
-      title: "The Pressure Teens Carry in Today's World",
-      type: "Column",
-      category: "Opinion / Society",
-      description: "A column examining mental health, expectations, social pressure, academics, technology, and the realities many teenagers face today.",
-      publications: ["Tahlequah Daily Press", "The Express-Star", "Muskogee Phoenix", "The Daily Star", "Ada News", "The Lebanon Reporter", "The Huntsville Item"],
-      sourceLinks: [
-        { label: "The Daily Star", url: "https://www.thedailystar.com/opinion/columns/the-pressure-teens-are-carrying-in-todays-world/article_cce2496d-2d39-43bd-8773-a6dc7c621a51.html" },
-        { label: "Ada News", url: "https://www.theadanews.com/opinion/guest-column-the-pressure-teens-carry-in-todays-world/article_7c246e6e-1732-54c4-9905-0cf6fbd807f7.html" },
-        { label: "The Lebanon Reporter", url: "https://www.reporter.net/opinion/column-the-pressure-teens-carry-in-todays-world/article_e9a8a882-8fc4-5831-b1dd-d7d19dd8d12e.html" }
-      ],
-      publicationDate: "Submitted Dec. 22, 2025",
-      badges: ["Opinion", "Society", "Youth Issues", "Culture"],
-      featured: false
-    },
-    {
-      title: "Reactions to Student Protests Discouraging",
-      type: "Column",
-      category: "Opinion / Civic Engagement",
-      description: "A column discussing public reactions to student activism, civic engagement, and youth participation in political and social issues.",
-      publications: ["Tahlequah Daily Press", "Muskogee Phoenix", "The Huntsville Item"],
-      sourceLinks: [],
-      publicationDate: "Submitted Mar. 5, 2026",
-      badges: ["Opinion", "Civic Engagement", "Politics", "Youth Issues"],
-      featured: false
-    },
-    {
       title: "Politics Isn't Just for Adults",
       type: "Column",
       category: "Opinion / Politics",
-      description: "A column discussing youth involvement in politics and why political issues directly affect younger generations.",
+      description: "Why teenagers tune out of politics when adults treat civic life like an exclusive club with an age requirement \u2014 and why the issues affect them anyway.",
       publications: ["Tahlequah Daily Press", "Muskogee Phoenix", "Ada News", "Gainesville Register", "Weatherford Democrat"],
       sourceLinks: [
         { label: "Tahlequah Daily Press", url: "https://www.tahlequahdailypress.com/opinion/column-politics-isnt-just-for-adults/article_2bca86fe-5344-4f2c-9759-f43a69f35d54.html" },
@@ -562,23 +699,8 @@ window.siteData = {
         { label: "Ada News", url: "https://www.theadanews.com/opinion/column-politics-isnt-just-for-adults/article_3eb5131b-119a-5678-b3e2-3acc904e81b4.html" },
         { label: "Gainesville Register", url: "https://www.gainesvilleregister.com/opinion/column-politics-isnt-just-for-adults/article_f95c3974-08f6-5a48-ad0d-4360f0c8ff98.html" }
       ],
-      publicationDate: "Submitted Oct. 12, 2025",
+      publicationDate: "Oct. 17, 2025",
       badges: ["Opinion", "Politics", "Youth Issues"],
-      featured: false
-    },
-    {
-      title: "Students Grow, Evolve in a Digital World",
-      type: "Feature",
-      category: "Technology / Youth",
-      description: "A national roundtable feature where Luke participated in a discussion about teenagers, technology, and growing up with screens.",
-      publications: ["CNHI News Service", "News and Tribune", "The Herald Bulletin", "The Huntsville Item", "Tahlequah Daily Press", "Yahoo Life"],
-      sourceLinks: [
-        { label: "News and Tribune", url: "https://www.newsandtribune.com/news/students-grow-evolve-in-a-digital-world/article_6e04978e-92a3-4411-990b-15eaead105a0.html" },
-        { label: "The Herald Bulletin", url: "https://www.heraldbulletin.com/news/state_news/students-grow-evolve-in-a-digital-world/article_638897f7-e1ca-404f-86eb-a40e19acac33.html" },
-        { label: "The Huntsville Item", url: "https://www.itemonline.com/cnhi_network/students-grow-evolve-in-a-digital-world/article_a7f28e2a-73f8-55ac-8737-476c699fd3a3.html" }
-      ],
-      publicationDate: "May 2026",
-      badges: ["Feature", "Technology", "Youth Issues", "Culture"],
       featured: false
     },
     {
