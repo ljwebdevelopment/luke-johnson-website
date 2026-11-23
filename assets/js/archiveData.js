@@ -384,19 +384,6 @@ window.siteData = {
       featured: true
     },
     {
-      title: "What Is Politics?",
-      type: "Column",
-      category: "Opinion / Politics",
-      description: "What politics actually means to young people who feel disconnected from the partisan noise of a midterm election cycle.",
-      publications: ["Northeastern Journal"],
-      sourceLinks: [
-        { label: "Northeastern Journal", url: "https://www.northeasternjournal.com/author/luke-johnson" }
-      ],
-      publicationDate: "Nov. 13, 2026",
-      badges: ["Opinion", "Politics", "Youth Issues"],
-      featured: false
-    },
-    {
       title: "What Veterans Day Means When You're Fifteen",
       type: "Column",
       category: "Opinion",
