@@ -1,12 +1,6 @@
 // Primary content database for Luke H. Johnson. Run `node scripts/build.js` after editing.
 // Each archive item may set `image` (a cover photo path) to show with it.
-// Update publication links, favicons, article source links, book covers, and verification notes here.
 window.siteData = {
-  editorialReference: {
-    name: "Kim Poindexter",
-    email: "kpoindexter@tahlequahdailypress.com",
-    note: "Primary editorial reference for confirming column dates, excerpts, syndication history, and final publication details."
-  },
   books: [
     {
       title: "Dead Air America",
