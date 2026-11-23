@@ -21,6 +21,7 @@ const ROOT = path.join(__dirname, "..");
 const SITE = "https://lukehjohnson.com/";
 const PERSON_ID = SITE + "#person";
 const WEBSITE_ID = SITE + "#website";
+const NJ_ID = SITE + "#northeastern-journal";
 
 const render = require(path.join(ROOT, "assets/js/render.js"));
 const sandbox = { window: {} };
@@ -33,7 +34,8 @@ const strip = (html) => html.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").repl
 // ---------- Entities ----------
 
 const BIO =
-  "Luke H. Johnson is a published author, independent columnist, and youth political advocate from Tahlequah, Oklahoma. " +
+  "Luke H. Johnson is an author, independent columnist, and youth political advocate from Tahlequah, Oklahoma, " +
+  "and the co-founder and publisher of the Northeastern Journal, a free, independent news site for northeastern Oklahoma. " +
   "He is the author of We're All the Same and Becoming You: Advice From a Teenager, and of the forthcoming political nonfiction book Dead Air America. " +
   "His columns on politics, media, education, and growing up have run in the Tulsa World, the Northeastern Journal, and newspapers across the CNHI network.";
 
@@ -44,7 +46,7 @@ const person = {
   alternateName: ["Luke H Johnson", "Luke Johnson"],
   givenName: "Luke",
   familyName: "Johnson",
-  jobTitle: ["Author", "Columnist", "Youth Political Advocate"],
+  jobTitle: ["Author", "Columnist", "Youth Political Advocate", "Publisher"],
   description: BIO,
   disambiguatingDescription:
     "American teenage author and newspaper columnist from Tahlequah, Oklahoma. Not the British businessman and former Financial Times columnist Luke Johnson.",
@@ -64,6 +66,7 @@ const person = {
     address: { "@type": "PostalAddress", addressLocality: "Tahlequah", addressRegion: "OK", addressCountry: "US" }
   },
   nationality: { "@type": "Country", name: "United States" },
+  worksFor: { "@id": NJ_ID },
   knowsAbout: [
     "Youth political advocacy",
     "Civic engagement",
@@ -92,13 +95,24 @@ const website = {
   url: SITE,
   name: "Luke H. Johnson",
   alternateName: ["lukehjohnson.com", "Luke H Johnson"],
-  description: "Official website of Luke H. Johnson, published author, independent columnist, and youth political advocate.",
+  description: "Official website of Luke H. Johnson, author, independent columnist, and youth political advocate.",
   publisher: { "@id": PERSON_ID },
   about: { "@id": PERSON_ID },
   inLanguage: "en-US"
 };
 
 const personRef = { "@id": PERSON_ID };
+
+// The news site Luke co-founded and publishes, with his grandmother as editor.
+const northeasternJournal = {
+  "@type": "NewsMediaOrganization",
+  "@id": NJ_ID,
+  name: "Northeastern Journal",
+  url: "https://www.northeasternjournal.com/",
+  description: "A free, independent news site for northeastern Oklahoma, co-founded by Luke H. Johnson, its publisher.",
+  areaServed: "Northeastern Oklahoma",
+  founder: personRef
+};
 
 function bookEntity(book) {
   const id = book.comingSoon ? "dead-air-america" : render.slug(book.title);
@@ -146,7 +160,11 @@ function articleEntity(item) {
     image: item.image ? abs(item.image) : undefined,
     url: links[0],
     sameAs: links.length > 1 ? links.slice(1) : undefined,
-    publisher: outlet ? { "@type": "NewsMediaOrganization", name: outlet.name, url: outlet.website } : undefined
+    publisher: !outlet
+      ? undefined
+      : outlet.name === "Northeastern Journal"
+        ? { "@id": NJ_ID }
+        : { "@type": "NewsMediaOrganization", name: outlet.name, url: outlet.website }
   };
   // Columns are by Luke; features and press coverage are about him.
   if (column) entity.author = personRef;
@@ -206,6 +224,7 @@ const graphs = {
     }),
     website,
     person,
+    northeasternJournal,
     ...books
   ],
   "writing.html": () => [
@@ -220,7 +239,8 @@ const graphs = {
     }),
     breadcrumbs("Writing", "writing.html"),
     website,
-    person
+    person,
+    northeasternJournal
   ],
   "books.html": (html) => [
     webPage("CollectionPage", "books.html", "Books by Luke H. Johnson", {
@@ -230,6 +250,7 @@ const graphs = {
     breadcrumbs("Books", "books.html"),
     website,
     person,
+    northeasternJournal,
     ...books,
     faqEntity(html, "books.html")
   ],
@@ -242,6 +263,7 @@ const graphs = {
     breadcrumbs("About", "about.html"),
     website,
     person,
+    northeasternJournal,
     faqEntity(html, "about.html")
   ],
   "contact.html": () => [
@@ -250,9 +272,10 @@ const graphs = {
     }),
     breadcrumbs("Contact", "contact.html"),
     website,
-    person
+    person,
+    northeasternJournal
   ],
-  "404.html": () => [website, person]
+  "404.html": () => [website, person, northeasternJournal]
 };
 
 // ---------- Write pages ----------
@@ -316,7 +339,7 @@ const columnLines = writing
 
 const llms = `# Luke H. Johnson
 
-> Luke H. Johnson is a published author, independent columnist, and youth political advocate from Tahlequah, Oklahoma. His official website is https://lukehjohnson.com/.
+> Luke H. Johnson is an author, independent columnist, and youth political advocate from Tahlequah, Oklahoma. His official website is https://lukehjohnson.com/.
 
 He is an American teenage writer. He is not the British businessman and former Financial Times columnist Luke Johnson.
 
@@ -324,7 +347,8 @@ He is an American teenage writer. He is not the British businessman and former F
 
 - Full name as published: Luke H. Johnson (also credited as Luke Johnson)
 - Hometown: Tahlequah, Oklahoma, United States
-- Roles: author, independent columnist, youth political advocate, public speaker
+- Roles: author, independent columnist, youth political advocate, publisher, public speaker
+- Publisher and co-founder of the Northeastern Journal (https://www.northeasternjournal.com/), a free, independent news site for northeastern Oklahoma, which he runs with his grandmother as editor
 - Books: We're All the Same (autism awareness and inclusion); Becoming You: Advice From a Teenager (identity and personal growth); Dead Air America (forthcoming political nonfiction and media criticism, release date not yet announced)
 - Columns: ${metrics.columns} published columns, carried in ${metrics.outlets} newspapers and outlets in ${metrics.states} U.S. states
 - Outlets include the Tulsa World, the Northeastern Journal, the Tahlequah Daily Press, the CNHI News Service, and CNHI newspapers in Oklahoma, Texas, Indiana, Pennsylvania, New York, Illinois, and West Virginia
