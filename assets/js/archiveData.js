@@ -1,4 +1,5 @@
 // Primary content database for Luke Johnson.
+// Each archive item may set `image` (a cover photo path) to show with it.
 // Update publication links, favicons, article source links, book covers, and verification notes here.
 window.siteData = {
   editorialReference: {
@@ -423,6 +424,7 @@ window.siteData = {
     },
     {
       title: "What Oklahoma Almost Had",
+      image: "assets/images/columns/what-oklahoma-almost-had.jpg",
       type: "Column",
       category: "Politics",
       description: "A reflection on Oklahoma's November 2026 election results and the competing visions for the state's future that were decided on Election Night.",
@@ -436,6 +438,7 @@ window.siteData = {
     },
     {
       title: "I Cannot Vote Yet, But This Election Is Already About Me",
+      image: "assets/images/columns/i-cannot-vote-yet.jpg",
       type: "Column",
       category: "Opinion / Politics",
       description: "An op-ed written from the perspective of a 15-year-old student on how the policy decisions made in a major election shape the future, education, and daily lives of America's young people — even though they are not yet old enough to cast a ballot.",
@@ -460,6 +463,7 @@ window.siteData = {
     },
     {
       title: "Shame On You, Cornell",
+      image: "assets/images/columns/shame-on-you-cornell.jpg",
       type: "Column",
       category: "Opinion",
       description: "A critique of Cornell University's institutional response to campus sexual assault allegations following the 2024 Chi Phi fraternity incident.",
@@ -500,6 +504,7 @@ window.siteData = {
     },
     {
       title: "The Strange Experience of Outgrowing Yourself",
+      image: "assets/images/columns/outgrowing-yourself.jpg",
       type: "Column",
       category: "Opinion",
       description: "On the realization of maturing quickly and growing past earlier versions of your own identity and perspective.",
@@ -513,6 +518,7 @@ window.siteData = {
     },
     {
       title: "On Being Someone's Twin",
+      image: "assets/images/columns/on-being-someones-twin.jpg",
       type: "Column",
       category: "Editorial",
       description: "Growing up alongside his twin brother, Jaren, and pushing past the stereotypes that treat twins as a matched set rather than two distinct people.",
@@ -526,6 +532,7 @@ window.siteData = {
     },
     {
       title: "Nobody's Asking Us",
+      image: "assets/images/columns/nobodys-asking-us.jpg",
       type: "Column",
       category: "Politics",
       description: "How political decisions are routinely made about young people without inviting them into the conversation.",
@@ -539,6 +546,7 @@ window.siteData = {
     },
     {
       title: "A Week at Yale With Community's Help",
+      image: "assets/images/columns/a-week-at-yale.jpg",
       type: "Column",
       category: "Opinion / Education",
       description: "A column about the week Luke spent at Yale's National Youth Leadership Forum on Medicine and Health Care — suturing, phlebotomy, triage, emergency medicine, and neurology alongside students from across the country — and about the Tahlequah community that helped make the trip possible.",
@@ -559,6 +567,7 @@ window.siteData = {
     },
     {
       title: "We've Forgotten How to Disagree",
+      image: "assets/images/columns/forgotten-how-to-disagree.jpg",
       type: "Column",
       category: "Opinion",
       description: "",
@@ -572,6 +581,7 @@ window.siteData = {
     },
     {
       title: "The Future Feels Different Now",
+      image: "assets/images/columns/future-feels-different.jpg",
       type: "Column",
       category: "Opinion",
       description: "",
@@ -585,6 +595,7 @@ window.siteData = {
     },
     {
       title: "Coming of Age During a War Nobody Declared",
+      image: "assets/images/columns/coming-of-age-war.jpg",
       type: "Column",
       category: "Opinion",
       description: "",
@@ -598,6 +609,7 @@ window.siteData = {
     },
     {
       title: "Rural, Young, and Politically Homeless",
+      image: "assets/images/columns/rural-young-politically-homeless.jpg",
       type: "Column",
       category: "Opinion",
       description: "",
@@ -705,6 +717,7 @@ window.siteData = {
     },
     {
       title: "Statehouse Session: Education One of Top Concerns at Legislative Forum",
+      image: "assets/images/columns/statehouse-session.jpg",
       type: "Feature / Speaking",
       category: "Education / Public Voice",
       description: "Coverage of Luke asking questions at a legislative forum about education, teacher engagement, state testing, and issues affecting students.",

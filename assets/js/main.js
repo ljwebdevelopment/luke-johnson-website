@@ -23,6 +23,12 @@
     return /^https?:/i.test(url) ? ` target="_blank" rel="noopener"` : "";
   }
 
+  // Cover photo for a piece, when archiveData.js lists one.
+  function photo(item, className) {
+    if (!item.image) return "";
+    return `<figure class="${className}"><img src="${item.image}" alt="" loading="lazy" decoding="async"></figure>`;
+  }
+
   function metaLine(parts) {
     return parts.filter(Boolean).join(`<span class="dot" aria-hidden="true">/</span>`);
   }
@@ -66,6 +72,7 @@
     const item = writing[0];
     const outlet = (item.publications || [])[0];
     node.innerHTML = `
+      ${photo(item, "lead-photo")}
       <p class="kicker">Latest ${isColumn(item) ? "column" : "work"}</p>
       <h2 class="lead-title">${item.title}</h2>
       ${item.description ? `<p class="lead-deck">${item.description}</p>` : ""}
@@ -80,6 +87,7 @@
     const outlet = (item.publications || [])[0];
     return `
       <article class="story">
+        ${photo(item, "story-photo")}
         <p class="kicker">${outlet || item.type}</p>
         <h3 class="story-title">${item.title}</h3>
         ${item.description ? `<p>${item.description}</p>` : ""}
@@ -102,9 +110,10 @@
         .slice(start, start + limit)
         .map((item) => {
           return `
-            <li>
+            <li${item.image ? ` class="has-thumb"` : ""}>
               <h3>${item.title}</h3>
               <p class="meta">${metaLine([(item.publications || [])[0], item.publicationDate])}</p>
+              ${photo(item, "index-thumb")}
             </li>
           `;
         })
@@ -168,7 +177,7 @@
   function entryMarkup(item) {
     const outlets = item.publications || [];
     return `
-      <li class="entry" data-kind="${isColumn(item) ? "column" : isFeature(item) ? "feature" : "other"}">
+      <li class="entry${item.image ? " has-photo" : ""}" data-kind="${isColumn(item) ? "column" : isFeature(item) ? "feature" : "other"}">
         <div class="entry-side">
           <span class="kicker">${item.type}</span>
           ${item.publicationDate ? `<span class="meta">${item.publicationDate}</span>` : ""}
@@ -178,6 +187,7 @@
           ${item.description ? `<p class="entry-desc">${item.description}</p>` : ""}
           ${outlets.length ? `<p class="entry-also">Ran in ${outlets.join(", ")}.</p>` : ""}
         </div>
+        ${photo(item, "entry-photo")}
       </li>
     `;
   }
