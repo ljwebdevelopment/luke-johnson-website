@@ -34,7 +34,7 @@ const strip = (html) => html.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").repl
 // ---------- Entities ----------
 
 const BIO =
-  "Luke H. Johnson is an author, independent columnist, and youth political advocate from Tahlequah, Oklahoma, " +
+  "Luke H. Johnson is a published author, independent columnist, and youth political advocate from Tahlequah, Oklahoma, " +
   "and the co-founder and publisher of the Northeastern Journal, a free, independent news site for northeastern Oklahoma. " +
   "He is the author of We're All the Same and Becoming You: Advice From a Teenager, and of the forthcoming political nonfiction book Dead Air America. " +
   "His columns on politics, media, education, and growing up have run in the Tulsa World, the Northeastern Journal, and newspapers across the CNHI network.";
@@ -95,7 +95,7 @@ const website = {
   url: SITE,
   name: "Luke H. Johnson",
   alternateName: ["lukehjohnson.com", "Luke H Johnson"],
-  description: "Official website of Luke H. Johnson, author, independent columnist, and youth political advocate.",
+  description: "Official website of Luke H. Johnson, published author, independent columnist, and youth political advocate.",
   publisher: { "@id": PERSON_ID },
   about: { "@id": PERSON_ID },
   inLanguage: "en-US"
@@ -339,7 +339,7 @@ const columnLines = writing
 
 const llms = `# Luke H. Johnson
 
-> Luke H. Johnson is an author, independent columnist, and youth political advocate from Tahlequah, Oklahoma. His official website is https://lukehjohnson.com/.
+> Luke H. Johnson is a published author, independent columnist, and youth political advocate from Tahlequah, Oklahoma. His official website is https://lukehjohnson.com/.
 
 He is an American teenage writer. He is not the British businessman and former Financial Times columnist Luke Johnson.
 
