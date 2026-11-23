@@ -168,26 +168,37 @@
       event.preventDefault();
       if (!form.reportValidity()) return;
 
-      const endpoint = window.contactFormConfig && window.contactFormConfig.googleAppsScriptUrl;
+      const endpoint = window.contactFormConfig && window.contactFormConfig.formspreeEndpoint;
       if (!endpoint) {
         setStatus(failure, "error");
-        console.warn("Google Apps Script URL is missing. Add it in assets/js/contactConfig.js.");
+        console.warn("Formspree endpoint is missing. Add it in assets/js/contactConfig.js.");
         return;
       }
 
       const formData = new FormData(form);
-      formData.set("timestamp", new Date().toISOString());
-      formData.set("sourcePage", window.location.href);
+      // Formspree uses _subject for the email subject and replies to "email".
+      formData.set("_subject", `lukehjohnson.com: ${formData.get("subject") || "New message"}`);
+      formData.set("page", window.location.href);
 
       if (button) {
         button.disabled = true;
         button.textContent = "Sending…";
       }
       try {
-        await fetch(endpoint, { method: "POST", mode: "no-cors", body: formData });
+        const response = await fetch(endpoint, {
+          method: "POST",
+          body: formData,
+          headers: { Accept: "application/json" }
+        });
+        if (!response.ok) {
+          const result = await response.json().catch(() => ({}));
+          const detail = (result.errors || []).map((e) => e.message).join(" ");
+          throw new Error(detail || `Formspree ${response.status}`);
+        }
         form.reset();
         setStatus(success, "success");
       } catch (error) {
+        console.warn(error);
         setStatus(failure, "error");
       } finally {
         if (button) {
