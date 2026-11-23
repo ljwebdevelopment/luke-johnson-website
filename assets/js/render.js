@@ -59,8 +59,12 @@
   // 480px-wide companion (name-480.jpg) for small slots.
   function photo(item, className, sizes) {
     if (!item.image) return "";
-    const small = item.image.replace(/\.jpg$/, "-480.jpg");
-    return `<figure class="${className}"><img src="${item.image}" srcset="${small} 480w, ${item.image} 1000w" sizes="${sizes}" alt="" loading="lazy" decoding="async"></figure>`;
+    // Photos uploaded through the admin page live in Supabase storage and
+    // have no small copy, so they are served as-is.
+    const srcset = /^assets\/images\/columns\/.+\.jpg$/.test(item.image)
+      ? ` srcset="${item.image.replace(/\.jpg$/, "-480.jpg")} 480w, ${item.image} 1000w" sizes="${sizes}"`
+      : "";
+    return `<figure class="${className}"><img src="${item.image}"${srcset} alt="" loading="lazy" decoding="async"></figure>`;
   }
 
   // ---------- Home ----------
@@ -218,7 +222,50 @@
       .join("");
   }
 
+  // ---------- Database rows (Supabase) -> site data ----------
+
+  const MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+
+  // 2026-11-16 -> "Nov. 16, 2026" (newspaper style).
+  function formatDate(iso) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+    return m ? `${MONTHS[Number(m[2]) - 1]} ${Number(m[3])}, ${m[1]}` : "";
+  }
+
+  // Rows from the pieces and outlets tables, in display order, merged into the
+  // site data (books and anything else stay as they are).
+  function fromDatabase(base, pieces, outlets) {
+    return Object.assign({}, base, {
+      publications: outlets.map((o) => ({
+        name: o.name,
+        location: o.location,
+        type: o.type,
+        scope: o.scope,
+        website: o.website,
+        description: o.description
+      })),
+      archiveItems: pieces
+        .map((p) => ({
+          title: p.title,
+          type: p.type,
+          category: p.category,
+          description: p.description,
+          publications: p.outlets || [],
+          sourceLinks: p.links || [],
+          publicationDate: p.date_label || formatDate(p.published_on),
+          badges: p.badges || [],
+          image: p.image_url || undefined
+        }))
+        .concat((base.archiveItems || []).filter(isBook))
+    });
+  }
+
+  // The REST queries both the site and the build script use.
+  const PIECES_QUERY = "pieces?select=*&order=published_on.desc.nullslast,position.asc,id.desc";
+  const OUTLETS_QUERY = "outlets?select=*&order=id.asc";
+
   return {
+    formatDate, fromDatabase, PIECES_QUERY, OUTLETS_QUERY,
     isColumn, isFeature, stateOf, slug, writing, metrics,
     lead, secondary, headlineIndex, outletRoll, shelf, bookRows, entries, directory
   };

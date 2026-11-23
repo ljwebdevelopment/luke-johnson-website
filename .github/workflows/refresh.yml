@@ -1,0 +1,47 @@
+# Rebuilds the pages from the Supabase database so search engines and AI
+# crawlers see columns added or removed on the admin page. Runs every hour,
+# after every push to main, and on demand (Actions > Refresh pages > Run workflow).
+name: Refresh pages
+
+on:
+  schedule:
+    - cron: "23 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: refresh-pages
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build pages from the database
+        run: node scripts/build.js
+
+      - name: Publish if anything changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898741+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Refresh pages from the database"
+          git push
+          # Pushes made by this workflow don't start a Pages build on their own.
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "Pages will publish on the next push."

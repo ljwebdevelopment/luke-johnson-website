@@ -14,26 +14,39 @@ at https://lukehjohnson.com (see `CNAME`).
 
 ## Content
 
-All site content (books, outlets, columns, and their cover photos) lives in
-`assets/js/archiveData.js`. Columns display in the order they appear in
-`archiveItems`: put the newest first. The first one becomes the lead story on
-the front page and the next two sit beneath it. To give a column a cover
-photo, add it to `assets/images/columns/` as `name.jpg` (1000px wide) plus
-`name-480.jpg` (480px wide), and set `image: "assets/images/columns/name.jpg"`.
+Columns and outlets are managed at **https://lukehjohnson.com/admin.html**.
+Sign in, then add, edit, or delete columns (with an optional cover photo) and
+outlets. Changes show on the live site right away; the hourly GitHub Action
+(`.github/workflows/refresh.yml`) rebuilds the HTML so search engines see them
+within the hour. To refresh sooner: Actions > Refresh pages > Run workflow.
 
-### After every content edit, run the build
+How it works:
 
-```
-node scripts/build.js
-```
+- The data lives in a Supabase project (see `assets/js/supabaseConfig.js`).
+  `supabase/setup.sql` creates the tables, the storage bucket for cover
+  photos, and the security rules: anyone can read, only accounts listed in
+  `public.admins` can change anything. Passwords are handled by Supabase Auth
+  and never appear in this code.
+- The browser loads columns and outlets from Supabase (`assets/js/main.js`);
+  if that fails, visitors see the last build.
+- `node scripts/build.js` writes the columns, books, and outlet lists into the
+  HTML (between `<!-- build:... -->` markers), updates counts, regenerates the
+  JSON-LD structured data and `llms.txt`. It reads Supabase when configured and
+  `assets/js/archiveData.js` otherwise; `--offline` forces the file.
+- Books still live in `assets/js/archiveData.js`. After editing them, run
+  `node scripts/build.js` (or let the Action do it on push).
 
-It needs no packages. It writes the columns, books, and outlet lists into the
-HTML (between `<!-- build:... -->` markers) so search engines and AI crawlers
-can read them without running JavaScript, updates the counts, regenerates the
-JSON-LD structured data in each page's `<head>`, and regenerates `llms.txt`.
-The live site re-renders the same blocks from `archiveData.js` in the browser,
-so visitors always see current data even if the build was skipped, but
-crawlers only see what the build last wrote.
+### First-time Supabase setup
+
+1. Supabase > SQL Editor: paste `supabase/setup.sql` and run it.
+2. Authentication > Sign In / Providers: turn off "Allow new users to sign up".
+3. Authentication > URL Configuration: set Site URL to
+   `https://lukehjohnson.com/admin.html`.
+4. Authentication > Users > Add user > Send invitation, to your email. The
+   email's link opens the admin page, where you choose your password.
+5. SQL Editor: run the "Make yourself an admin" statement at the end of
+   `supabase/setup.sql` with your email.
+6. Sign in at `/admin.html` and click "Import current site data" once.
 
 ## SEO and AI search
 
