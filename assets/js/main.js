@@ -1,319 +1,307 @@
+// Renders every data-driven block on lukehjohnson.com from window.siteData
+// (assets/js/archiveData.js). Each page includes only the hooks it needs.
 (function () {
+  "use strict";
+
   const data = window.siteData || {};
+  const books = data.books || [];
+  const outlets = data.publications || [];
+  // Books live on the books page, so the writing list leaves them out.
+  const writing = (data.archiveItems || []).filter((item) => !/book/i.test(item.type || ""));
 
-  function qs(selector, scope = document) {
-    return scope.querySelector(selector);
+  const qs = (selector, scope = document) => scope.querySelector(selector);
+  const qsa = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
+
+  const isColumn = (item) => /column/i.test(item.type || "");
+  const isFeature = (item) => /feature/i.test(item.type || "");
+  const stateOf = (outlet) => {
+    const parts = String(outlet.location || "").split(",");
+    return (parts[1] || parts[0] || "").trim() || "Other";
+  };
+
+  function external(url) {
+    return /^https?:/i.test(url) ? ` target="_blank" rel="noopener"` : "";
   }
 
-  function qsa(selector, scope = document) {
-    return Array.from(scope.querySelectorAll(selector));
+  // Cover photo for a piece, when archiveData.js lists one.
+  function photo(item, className) {
+    if (!item.image) return "";
+    return `<figure class="${className}"><img src="${item.image}" alt="" loading="lazy" decoding="async"></figure>`;
   }
 
-  function initials(name) {
-    return name
-      .replace(/The\s+/gi, "")
-      .split(/\s+|\/|&|-/)
-      .filter(Boolean)
-      .slice(0, 3)
-      .map((word) => word[0])
-      .join("")
-      .toUpperCase();
+  function metaLine(parts) {
+    return parts.filter(Boolean).join(`<span class="dot" aria-hidden="true">/</span>`);
   }
 
-  function slug(value) {
-    return String(value || "")
-      .toLowerCase()
-      .replace(/&/g, "and")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "");
-  }
+  // ---------- Metrics ----------
 
-  function fallbackMark(name) {
-    return `<span>${initials(name)}</span>`;
-  }
-
-  function createBadges(badges) {
-    if (!badges || !badges.length) return "";
-    return `<div class="badge-row">${badges.map((badge) => `<span class="badge">${badge}</span>`).join("")}</div>`;
-  }
-
-  // True when every outlet already appears as a direct link, so listing the
-  // publication names again would just repeat the link row.
-  function linkedEverywhere(item) {
-    const labels = (item.sourceLinks || []).map((link) => link.label);
-    const publications = item.publications || [];
-    return publications.length > 0 && publications.every((name) => labels.includes(name));
-  }
-
-  function createSourceLinks(links) {
-    if (!links || !links.length) return "";
-    return `
-      <div class="source-links">
-        ${links.map((link) => `<a href="${link.url}" target="_blank" rel="noopener">${link.label}</a>`).join("")}
-      </div>
-    `;
-  }
-
-  function createArchiveCard(item) {
-    const article = document.createElement("article");
-    article.className = "archive-card";
-    const badges = item.badges || [];
-    const publications = item.publications || [];
-    article.dataset.category = slug(item.type);
-    article.dataset.filters = [item.type, item.category, ...badges].map(slug).join(" ");
-    article.dataset.search = [
-      item.title,
-      item.type,
-      item.category,
-      item.description,
-      item.publicationDate,
-      publications.join(" "),
-      badges.join(" ")
-    ].filter(Boolean).join(" ").toLowerCase();
-
-    article.innerHTML = `
-      <div class="card-meta">
-        <span>${item.type}</span>
-        ${item.publicationDate ? `<span>${item.publicationDate}</span>` : ""}
-      </div>
-      <h3>${item.title}</h3>
-      ${createBadges(badges)}
-      ${item.description ? `<p>${item.description}</p>` : ""}
-      ${linkedEverywhere(item) ? "" : `<p class="publication-list">${publications.join(" &middot; ")}</p>`}
-      ${createSourceLinks(item.sourceLinks)}
-    `;
-    return article;
-  }
-
-  function createBookCard(book, index) {
-    const article = document.createElement("article");
-    article.className = "book-card";
-    const frontCover = book.coverImage
-      ? `<figure class="book-cover-side"><img src="${book.coverImage}" alt="Front cover of ${book.title}" loading="lazy" onerror="this.closest('figure').remove();"><figcaption>Front</figcaption></figure>`
-      : "";
-    const backCover = book.backCoverImage
-      ? `<figure class="book-cover-side"><img src="${book.backCoverImage}" alt="Back cover of ${book.title}" loading="lazy"><figcaption>Back</figcaption></figure>`
-      : "";
-
-    const amazonButton = book.amazonLink
-      ? `<a class="button button-small" href="${book.amazonLink}" target="_blank" rel="noopener">Buy on Amazon</a>`
-      : "";
-    const learnMoreButton = book.learnMoreLink
-      ? `<a class="button button-small button-outline" href="${book.learnMoreLink}">Learn More</a>`
-      : "";
-    const actions = book.comingSoon
-      ? `<span class="coming-soon">Coming Soon${book.releaseWindow ? ` &middot; ${book.releaseWindow}` : ""}</span>${learnMoreButton ? `<div class="button-row">${learnMoreButton}</div>` : ""}`
-      : `<div class="button-row">${amazonButton}${learnMoreButton}</div>`;
-
-    article.innerHTML = `
-      <div class="book-cover" data-cover-count="${Number(Boolean(frontCover)) + Number(Boolean(backCover))}">${frontCover}${backCover || (frontCover ? "" : `<figure class="book-cover-side"><div class="book-placeholder" aria-hidden="true"><span>${index + 1}</span><strong>${book.title}</strong></div><figcaption>Cover</figcaption></figure>`)}</div>
-      <div class="book-copy">
-        <p class="eyebrow">${book.comingSoon ? "Upcoming Book" : "Book"}</p>
-        <h3>${book.title}</h3>
-        ${book.comingSoon ? "" : `<p class="source">${book.year}</p>`}
-        <p>${book.description}</p>
-        ${actions}
-      </div>
-    `;
-    return article;
-  }
-
-  function createPublicationCard(pub) {
-    const article = document.createElement("article");
-    article.className = "publication-card";
-    const mark = pub.faviconUrl
-      ? `<img src="${pub.faviconUrl}" alt="" loading="lazy" onerror="var p=this.parentElement; this.remove(); p.innerHTML='${fallbackMark(pub.name).replace(/'/g, "\\'")}';">`
-      : fallbackMark(pub.name);
-    article.innerHTML = `
-      <div class="publication-mark">${mark}</div>
-      <h3>${pub.name}</h3>
-      <p>${pub.location}</p>
-      <p>${pub.description}</p>
-      <div class="pub-card-footer">
-        <span class="pub-type">${pub.type} / ${pub.scope}</span>
-        <a class="text-link" href="${pub.website}" target="_blank" rel="noopener">Visit Site</a>
-      </div>
-    `;
-    return article;
-  }
-
-  function calculateMetrics() {
-    const archiveItems = data.archiveItems || [];
-    const publications = data.publications || [];
+  function metrics() {
+    const states = new Set(outlets.map(stateOf).filter((s) => s !== "National"));
     return {
-      books: (data.books || []).filter((book) => !book.comingSoon).length,
-      columns: archiveItems.filter((item) => item.type && item.type.toLowerCase().includes("column")).length,
-      publications: publications.length,
-      national: publications.filter((pub) => pub.scope === "National").length,
-      syndicated: archiveItems.filter((item) => (item.publications || []).length > 1 && item.type && item.type.toLowerCase().includes("column")).length
+      columns: writing.filter(isColumn).length,
+      outlets: outlets.length,
+      states: states.size,
+      books: books.filter((book) => !book.comingSoon).length
     };
   }
 
   function renderMetrics() {
-    const metrics = calculateMetrics();
+    const values = metrics();
     qsa("[data-metric]").forEach((node) => {
       const key = node.dataset.metric;
-      if (Object.prototype.hasOwnProperty.call(metrics, key)) {
-        node.textContent = metrics[key];
-      }
+      if (key in values) node.textContent = values[key];
     });
   }
 
-  function renderArchive() {
-    const grid = qs("[data-archive-grid]");
-    if (!grid) return;
+  function renderDate() {
+    qsa("[data-today]").forEach((node) => {
+      node.textContent = new Date().toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+      });
+    });
+  }
 
-    const items = (data.archiveItems || []).slice();
-    items.sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
-    const limit = Number(grid.dataset.limit || items.length);
-    items.slice(0, limit).forEach((item) => grid.appendChild(createArchiveCard(item)));
+  // ---------- Home: front page ----------
 
-    const search = qs("[data-archive-search]");
+  function renderLead() {
+    const node = qs("[data-lead]");
+    if (!node || !writing.length) return;
+    const item = writing[0];
+    const outlet = (item.publications || [])[0];
+    node.innerHTML = `
+      ${photo(item, "lead-photo")}
+      <p class="kicker">Latest ${isColumn(item) ? "column" : "work"}</p>
+      <h2 class="lead-title">${item.title}</h2>
+      ${item.description ? `<p class="lead-deck">${item.description}</p>` : ""}
+      <p class="meta">${metaLine([outlet, item.publicationDate])}</p>
+      <div class="btn-row">
+        <a class="btn" href="writing.html">All writing</a>
+      </div>
+    `;
+  }
+
+  function storyMarkup(item) {
+    const outlet = (item.publications || [])[0];
+    return `
+      <article class="story">
+        ${photo(item, "story-photo")}
+        <p class="kicker">${outlet || item.type}</p>
+        <h3 class="story-title">${item.title}</h3>
+        ${item.description ? `<p>${item.description}</p>` : ""}
+        <p class="meta">${metaLine([item.publicationDate, (item.publications || []).length > 1 ? `${item.publications.length} outlets` : ""])}</p>
+      </article>
+    `;
+  }
+
+  function renderSecondary() {
+    const node = qs("[data-secondary]");
+    if (!node) return;
+    node.innerHTML = writing.slice(1, 3).map(storyMarkup).join("");
+  }
+
+  function renderHeadlineIndex() {
+    qsa("[data-headline-index]").forEach((list) => {
+      const start = Number(list.dataset.start || 0);
+      const limit = Number(list.dataset.limit || writing.length);
+      list.innerHTML = writing
+        .slice(start, start + limit)
+        .map((item) => {
+          return `
+            <li${item.image ? ` class="has-thumb"` : ""}>
+              <h3>${item.title}</h3>
+              <p class="meta">${metaLine([(item.publications || [])[0], item.publicationDate])}</p>
+              ${photo(item, "index-thumb")}
+            </li>
+          `;
+        })
+        .join("");
+    });
+  }
+
+  function renderOutletRoll() {
+    qsa("[data-outlet-roll]").forEach((node) => {
+      node.innerHTML = outlets
+        .map((outlet) => `<a href="${outlet.website}"${external(outlet.website)}>${outlet.name}</a>`)
+        .join(` <span class="sep" aria-hidden="true">/</span> `);
+    });
+  }
+
+  function renderShelf() {
+    qsa("[data-shelf]").forEach((node) => {
+      node.innerHTML = books
+        .filter((book) => !book.comingSoon)
+        .map((book) => `
+          <article class="shelf-book">
+            <img src="${book.coverImage}" alt="Cover of ${book.title}" width="342" height="445" loading="lazy">
+            <div>
+              <p class="kicker">Book</p>
+              <h3>${book.title}</h3>
+              <p>${book.description}</p>
+              ${book.amazonLink ? `<a class="more-link" href="${book.amazonLink}" target="_blank" rel="noopener">Buy on Amazon</a>` : ""}
+            </div>
+          </article>
+        `)
+        .join("");
+    });
+  }
+
+  // ---------- Books page ----------
+
+  function renderBookRows() {
+    qsa("[data-book-rows]").forEach((node) => {
+      node.innerHTML = books
+        .filter((book) => !book.comingSoon)
+        .map((book) => `
+          <article class="book-row">
+            <div class="book-covers">
+              ${book.coverImage ? `<figure><img src="${book.coverImage}" alt="Front cover of ${book.title}" width="342" height="445" loading="lazy"><figcaption class="meta">Front</figcaption></figure>` : ""}
+              ${book.backCoverImage ? `<figure><img src="${book.backCoverImage}" alt="Back cover of ${book.title}" width="342" height="445" loading="lazy"><figcaption class="meta">Back</figcaption></figure>` : ""}
+            </div>
+            <div>
+              <p class="kicker">Nonfiction</p>
+              <h3>${book.title}</h3>
+              <p>${book.description}</p>
+              ${book.amazonLink ? `<div class="btn-row"><a class="btn" href="${book.amazonLink}" target="_blank" rel="noopener">Buy on Amazon</a></div>` : ""}
+            </div>
+          </article>
+        `)
+        .join("");
+    });
+  }
+
+  // ---------- Writing page ----------
+
+  function entryMarkup(item) {
+    const outlets = item.publications || [];
+    return `
+      <li class="entry${item.image ? " has-photo" : ""}" data-kind="${isColumn(item) ? "column" : isFeature(item) ? "feature" : "other"}">
+        <div class="entry-side">
+          <span class="kicker">${item.type}</span>
+          ${item.publicationDate ? `<span class="meta">${item.publicationDate}</span>` : ""}
+        </div>
+        <div>
+          <h2 class="entry-title">${item.title}</h2>
+          ${item.description ? `<p class="entry-desc">${item.description}</p>` : ""}
+          ${outlets.length ? `<p class="entry-also">Ran in ${outlets.join(", ")}.</p>` : ""}
+        </div>
+        ${photo(item, "entry-photo")}
+      </li>
+    `;
+  }
+
+  function renderEntries() {
+    const list = qs("[data-entries]");
+    if (!list) return;
+
+    list.innerHTML = writing.map(entryMarkup).join("");
+    const entries = qsa(".entry", list);
+    entries.forEach((entry, index) => {
+      entry.dataset.search = JSON.stringify(writing[index]).toLowerCase();
+    });
+
+    const search = qs("[data-search]");
     const filters = qsa("[data-filter]");
-    const empty = qs("[data-empty-state]");
+    const count = qs("[data-result-count]");
+    const empty = qs("[data-empty]");
 
-    function applyFilters() {
-      const query = (search && search.value ? search.value : "").toLowerCase().trim();
-      const active = (qs("[data-filter].is-active") || {}).dataset?.filter || "all";
+    function apply() {
+      const query = (search ? search.value : "").toLowerCase().trim();
+      const active = (filters.find((btn) => btn.getAttribute("aria-pressed") === "true") || {}).dataset;
+      const kind = active ? active.filter : "all";
       let shown = 0;
-
-      qsa(".archive-card", grid).forEach((card) => {
-        const matchesFilter = active === "all" || card.dataset.filters.includes(active) || card.dataset.category === active;
-        const matchesSearch = !query || card.dataset.search.includes(query);
-        const visible = matchesFilter && matchesSearch;
-        card.hidden = !visible;
+      entries.forEach((entry) => {
+        const visible =
+          (kind === "all" || entry.dataset.kind === kind) &&
+          (!query || entry.dataset.search.includes(query));
+        entry.hidden = !visible;
         if (visible) shown += 1;
       });
-
+      if (count) count.textContent = `${shown} ${shown === 1 ? "piece" : "pieces"}`;
       if (empty) empty.hidden = shown !== 0;
     }
 
-    if (search) search.addEventListener("input", applyFilters);
     filters.forEach((button) => {
       button.addEventListener("click", () => {
-        filters.forEach((filter) => filter.classList.remove("is-active"));
-        button.classList.add("is-active");
-        applyFilters();
+        filters.forEach((btn) => btn.setAttribute("aria-pressed", String(btn === button)));
+        apply();
       });
     });
 
-    const queryParam = new URLSearchParams(window.location.search).get("q");
-    if (queryParam && search) {
-      search.value = queryParam;
+    if (search) {
+      const fromUrl = new URLSearchParams(window.location.search).get("q");
+      if (fromUrl) search.value = fromUrl;
+      search.addEventListener("input", apply);
     }
-    applyFilters();
+    apply();
   }
 
-  function createColumnCard(item) {
-    const article = document.createElement("article");
-    article.className = "column-card";
-    const source = (item.publications || [])[0] || "";
-    const readLink = (item.sourceLinks || [])[0];
-    const readHref = readLink ? readLink.url : "archive.html";
-    const external = Boolean(readLink);
-    article.innerHTML = `
-      <div class="column-source">
-        <span>${source}</span>
-        <span>${item.publicationDate || ""}</span>
-      </div>
-      <h3>${item.title}</h3>
-      ${item.description ? `<p>${item.description}</p>` : ""}
-      <a class="text-link" href="${readHref}"${external ? ` target="_blank" rel="noopener"` : ""}>Read the column</a>
-    `;
-    return article;
-  }
-
-  function renderColumns() {
-    const grid = qs("[data-columns-grid]");
-    if (!grid) return;
-    const columns = (data.archiveItems || [])
-      .filter((item) => item.type && item.type.toLowerCase().includes("column"))
-      .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
-    const limit = Number(grid.dataset.limit || columns.length);
-    columns.slice(0, limit).forEach((item) => grid.appendChild(createColumnCard(item)));
-  }
-
-  function renderBooks() {
-    const grid = qs("[data-books-grid]");
-    if (!grid) return;
-    const excludeComingSoon = grid.hasAttribute("data-exclude-coming-soon");
-    (data.books || [])
-      .filter((book) => !excludeComingSoon || !book.comingSoon)
-      .forEach((book, index) => grid.appendChild(createBookCard(book, index)));
-  }
-
-  function renderPublications() {
-    qsa("[data-publications-grid]").forEach((grid) => {
-      const limit = Number(grid.dataset.limit || (data.publications || []).length);
-      (data.publications || []).slice(0, limit).forEach((pub) => grid.appendChild(createPublicationCard(pub)));
+  function renderDirectory() {
+    const node = qs("[data-directory]");
+    if (!node) return;
+    const groups = new Map();
+    outlets.forEach((outlet) => {
+      const state = stateOf(outlet);
+      if (!groups.has(state)) groups.set(state, []);
+      groups.get(state).push(outlet);
     });
-  }
-
-  function createPublicationLogoCell(pub) {
-    const cell = document.createElement(pub.website ? "a" : "div");
-    cell.className = "logo-cell";
-    if (pub.website) {
-      cell.href = pub.website;
-      cell.target = "_blank";
-      cell.rel = "noopener";
-    }
-    const mark = pub.faviconUrl
-      ? `<img src="${pub.faviconUrl}" alt="" loading="lazy" onerror="var p=this.parentElement; this.remove(); p.textContent='${initials(pub.name)}';">`
-      : initials(pub.name);
-    cell.innerHTML = `
-      <span class="logo-mark" aria-hidden="true">${mark}</span>
-      <span class="logo-name">${pub.name}<span class="logo-loc">${pub.location}</span></span>
-    `;
-    return cell;
-  }
-
-  function renderPublicationLogos() {
-    qsa("[data-publications-logos]").forEach((grid) => {
-      const limit = Number(grid.dataset.limit || (data.publications || []).length);
-      (data.publications || []).slice(0, limit).forEach((pub) => grid.appendChild(createPublicationLogoCell(pub)));
+    // Home state first, then national outlets, then everyone else by size.
+    const order = Array.from(groups.keys()).sort((a, b) => {
+      const rank = (s) => (s === "Oklahoma" ? 0 : s === "National" ? 1 : 2);
+      return rank(a) - rank(b) || groups.get(b).length - groups.get(a).length || a.localeCompare(b);
     });
+    node.innerHTML = order
+      .map((state) => `
+        <section class="directory-group">
+          <h3>${state}<span>${groups.get(state).length}</span></h3>
+          <ul>
+            ${groups.get(state).map((outlet) => `
+              <li>
+                <a href="${outlet.website}" target="_blank" rel="noopener">${outlet.name}</a>
+                <span>${state === "National" ? outlet.type : outlet.location.split(",")[0]}</span>
+              </li>
+            `).join("")}
+          </ul>
+        </section>
+      `)
+      .join("");
   }
 
-  function setupNavigation() {
-    const toggle = qs(".nav-toggle");
-    const nav = qs("#site-navigation");
+  // ---------- Chrome ----------
+
+  function setupNav() {
+    const toggle = qs(".menu-toggle");
+    const nav = qs("#site-nav");
     if (!toggle || !nav) return;
 
-    function setOpen(open) {
+    const setOpen = (open) => {
       toggle.setAttribute("aria-expanded", String(open));
       nav.classList.toggle("is-open", open);
-      // Locks the page behind the drawer; the class is a no-op above the
-      // breakpoint where the drawer doesn't exist.
-      document.body.classList.toggle("nav-open", open);
-    }
-
-    function isOpen() {
-      return toggle.getAttribute("aria-expanded") === "true";
-    }
+    };
+    const isOpen = () => toggle.getAttribute("aria-expanded") === "true";
 
     toggle.addEventListener("click", () => setOpen(!isOpen()));
-
-    // Tapping a destination should take you there, not leave the drawer over it.
-    qsa(".nav-link", nav).forEach((link) => {
-      link.addEventListener("click", () => setOpen(false));
-    });
-
+    qsa("a", nav).forEach((link) => link.addEventListener("click", () => setOpen(false)));
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && isOpen()) {
         setOpen(false);
         toggle.focus();
       }
     });
-
     document.addEventListener("click", (event) => {
-      if (!isOpen()) return;
-      if (nav.contains(event.target) || toggle.contains(event.target)) return;
-      setOpen(false);
+      if (isOpen() && !nav.contains(event.target) && !toggle.contains(event.target)) setOpen(false);
     });
-
-    // Rotating to landscape can cross the breakpoint and strand the lock.
     window.addEventListener("resize", () => {
-      if (isOpen() && window.innerWidth > 960) setOpen(false);
+      if (isOpen() && window.innerWidth > 760) setOpen(false);
+    });
+  }
+
+  function markCurrentPage() {
+    const current = window.location.pathname.split("/").pop() || "index.html";
+    qsa("#site-nav a").forEach((link) => {
+      if (link.getAttribute("href") === current) link.setAttribute("aria-current", "page");
     });
   }
 
@@ -322,23 +310,25 @@
     if (!form) return;
 
     const status = qs("[data-form-status]", form);
-    const submitButton = qs("button[type='submit']", form);
-    const successMessage = "Thank you for reaching out. Your message has been received and I will respond as soon as possible.";
-    const errorMessage = "There was a problem submitting your message. Please try again later.";
+    const button = qs("button[type='submit']", form);
+    const label = button ? button.textContent : "";
+    const success = "Thank you for reaching out. Your message has been received and I will respond as soon as possible.";
+    const failure = "There was a problem submitting your message. Please try again later.";
 
-    function setStatus(message, type) {
+    const setStatus = (message, type) => {
       if (!status) return;
       status.textContent = message;
       status.dataset.status = type;
       status.setAttribute("role", type === "error" ? "alert" : "status");
-    }
+    };
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
+      if (!form.reportValidity()) return;
 
       const endpoint = window.contactFormConfig && window.contactFormConfig.googleAppsScriptUrl;
       if (!endpoint) {
-        setStatus(errorMessage, "error");
+        setStatus(failure, "error");
         console.warn("Google Apps Script URL is missing. Add it in assets/js/contactConfig.js.");
         return;
       }
@@ -347,132 +337,38 @@
       formData.set("timestamp", new Date().toISOString());
       formData.set("sourcePage", window.location.href);
 
-      if (submitButton) {
-        submitButton.disabled = true;
-        submitButton.textContent = "Sending...";
+      if (button) {
+        button.disabled = true;
+        button.textContent = "Sending…";
       }
-
       try {
-        await fetch(endpoint, {
-          method: "POST",
-          mode: "no-cors",
-          body: formData
-        });
+        await fetch(endpoint, { method: "POST", mode: "no-cors", body: formData });
         form.reset();
-        setStatus(successMessage, "success");
+        setStatus(success, "success");
       } catch (error) {
-        setStatus(errorMessage, "error");
+        setStatus(failure, "error");
       } finally {
-        if (submitButton) {
-          submitButton.disabled = false;
-          submitButton.textContent = "Send Message";
+        if (button) {
+          button.disabled = false;
+          button.textContent = label;
         }
       }
     });
   }
 
-  function setupNewsletter() {
-    const form = qs("[data-newsletter]");
-    if (!form) return;
-    const status = qs("[data-newsletter-status]");
-    const input = qs("input[type='email']", form);
-
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const value = (input && input.value ? input.value : "").trim();
-      const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-      if (!status) return;
-      if (!valid) {
-        status.textContent = "Please enter a valid email address.";
-        status.dataset.status = "error";
-        if (input) input.focus();
-        return;
-      }
-      status.textContent = "Thanks! Email updates aren't automated yet — for now, reach Luke through the contact page and he'll add you.";
-      status.dataset.status = "success";
-      form.reset();
-    });
-  }
-
-  const prefersReducedMotion = window.matchMedia
-    ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    : false;
-
-  function setupReveal() {
-    const items = qsa(".reveal");
-    if (!items.length) return;
-    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
-      items.forEach((el) => el.classList.add("is-visible"));
-      return;
-    }
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.14, rootMargin: "0px 0px -40px 0px" }
-    );
-    items.forEach((el) => observer.observe(el));
-  }
-
-  function animateCount(node) {
-    const target = parseInt(node.textContent, 10);
-    if (!Number.isFinite(target) || prefersReducedMotion) return;
-    const duration = 1100;
-    const start = performance.now();
-    node.textContent = "0";
-    function step(now) {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      node.textContent = String(Math.round(eased * target));
-      if (progress < 1) requestAnimationFrame(step);
-      else node.textContent = String(target);
-    }
-    requestAnimationFrame(step);
-  }
-
-  function setupCounters() {
-    const nodes = qsa("[data-count]");
-    if (!nodes.length) return;
-    if (prefersReducedMotion || !("IntersectionObserver" in window)) return;
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            animateCount(entry.target);
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.6 }
-    );
-    nodes.forEach((node) => observer.observe(node));
-  }
-
-  function markCurrentPage() {
-    const current = window.location.pathname.split("/").pop() || "index.html";
-    qsa(".nav-link").forEach((link) => {
-      const href = link.getAttribute("href");
-      if (href === current) link.setAttribute("aria-current", "page");
-    });
-  }
-
   document.addEventListener("DOMContentLoaded", () => {
-    setupNavigation();
+    setupNav();
     markCurrentPage();
+    renderDate();
     renderMetrics();
-    renderArchive();
-    renderColumns();
-    renderBooks();
-    renderPublications();
-    renderPublicationLogos();
+    renderLead();
+    renderSecondary();
+    renderHeadlineIndex();
+    renderOutletRoll();
+    renderShelf();
+    renderBookRows();
+    renderEntries();
+    renderDirectory();
     setupContactForm();
-    setupNewsletter();
-    setupReveal();
-    setupCounters();
   });
 })();
