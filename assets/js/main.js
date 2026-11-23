@@ -23,16 +23,6 @@
     return /^https?:/i.test(url) ? ` target="_blank" rel="noopener"` : "";
   }
 
-  function primaryLink(item) {
-    const link = (item.sourceLinks || [])[0];
-    return link ? link.url : "";
-  }
-
-  // Headline text, linked to the article when there is one online.
-  function headline(item, href) {
-    return href ? `<a href="${href}"${external(href)}>${item.title}</a>` : item.title;
-  }
-
   function metaLine(parts) {
     return parts.filter(Boolean).join(`<span class="dot" aria-hidden="true">/</span>`);
   }
@@ -75,26 +65,23 @@
     if (!node || !writing.length) return;
     const item = writing[0];
     const outlet = (item.publications || [])[0];
-    const href = primaryLink(item);
     node.innerHTML = `
       <p class="kicker">Latest ${isColumn(item) ? "column" : "work"}</p>
-      <h2 class="lead-title">${headline(item, href)}</h2>
+      <h2 class="lead-title">${item.title}</h2>
       ${item.description ? `<p class="lead-deck">${item.description}</p>` : ""}
       <p class="meta">${metaLine([outlet, item.publicationDate])}</p>
       <div class="btn-row">
-        ${href ? `<a class="btn" href="${href}"${external(href)}>Read it${outlet ? ` in ${outlet.replace(/^The /, "the ")}` : ""}</a>` : ""}
-        <a class="btn btn-ghost" href="writing.html">All writing</a>
+        <a class="btn" href="writing.html">All writing</a>
       </div>
     `;
   }
 
   function storyMarkup(item) {
-    const href = primaryLink(item);
     const outlet = (item.publications || [])[0];
     return `
       <article class="story">
         <p class="kicker">${outlet || item.type}</p>
-        <h3 class="story-title">${headline(item, href)}</h3>
+        <h3 class="story-title">${item.title}</h3>
         ${item.description ? `<p>${item.description}</p>` : ""}
         <p class="meta">${metaLine([item.publicationDate, (item.publications || []).length > 1 ? `${item.publications.length} outlets` : ""])}</p>
       </article>
@@ -114,10 +101,9 @@
       list.innerHTML = writing
         .slice(start, start + limit)
         .map((item) => {
-          const href = primaryLink(item);
           return `
             <li>
-              <h3>${headline(item, href)}</h3>
+              <h3>${item.title}</h3>
               <p class="meta">${metaLine([(item.publications || [])[0], item.publicationDate])}</p>
             </li>
           `;
@@ -180,10 +166,7 @@
   // ---------- Writing page ----------
 
   function entryMarkup(item) {
-    const links = item.sourceLinks || [];
-    const labels = links.map((link) => link.label);
-    const unlinked = (item.publications || []).filter((name) => !labels.includes(name));
-    const href = primaryLink(item);
+    const outlets = item.publications || [];
     return `
       <li class="entry" data-kind="${isColumn(item) ? "column" : isFeature(item) ? "feature" : "other"}">
         <div class="entry-side">
@@ -191,10 +174,9 @@
           ${item.publicationDate ? `<span class="meta">${item.publicationDate}</span>` : ""}
         </div>
         <div>
-          <h2 class="entry-title">${headline(item, href)}</h2>
+          <h2 class="entry-title">${item.title}</h2>
           ${item.description ? `<p class="entry-desc">${item.description}</p>` : ""}
-          ${links.length ? `<p class="entry-links"><span class="meta">Read it in</span>${links.map((link) => `<a href="${link.url}" target="_blank" rel="noopener">${link.label}</a>`).join("")}</p>` : ""}
-          ${unlinked.length ? `<p class="entry-also">${links.length ? "Also ran in" : "Ran in"} ${unlinked.join(", ")}.</p>` : ""}
+          ${outlets.length ? `<p class="entry-also">Ran in ${outlets.join(", ")}.</p>` : ""}
         </div>
       </li>
     `;
