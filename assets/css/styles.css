@@ -426,9 +426,9 @@ p, h1, h2, h3, h4, ul, ol, figure, blockquote {
 .nameplate-title {
   margin: clamp(10px, 2vw, 22px) 0 clamp(8px, 1.4vw, 16px);
   font-family: var(--display);
-  font-size: clamp(3rem, 14vw, 12rem);
-  /* "LUKE JOHNSON" sets at ~5.75em wide; size it to fill the column exactly. */
-  font-size: 17cqi;
+  font-size: clamp(2.6rem, 12.5vw, 10.5rem);
+  /* "LUKE H. JOHNSON" sets at ~6.7em wide; size it to fill the column exactly. */
+  font-size: 14.9cqi;
   font-stretch: 66%;
   font-weight: 900;
   letter-spacing: -0.012em;
