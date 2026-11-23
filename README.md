@@ -1,14 +1,28 @@
-# Luke Johnson Website
+# lukehjohnson.com
 
-Static author and columnist website for Luke Johnson.
+Static author and columnist website for Luke Johnson, served by GitHub Pages
+at https://lukehjohnson.com (see `CNAME`).
+
+## Pages
+
+- `index.html` — front page: latest column, more columns, Dead Air America, outlets, books
+- `writing.html` — every column and feature (searchable), plus the outlet directory by state
+- `books.html` — Dead Air America and the published books
+- `about.html` — bio and FAQ
+- `contact.html` — contact form
+- `404.html` — not-found page
 
 ## Content
 
-All site content — books, publications, columns, and the links out to each
+All site content — books, outlets, columns, and the links out to each
 published article — lives in `assets/js/archiveData.js`. The pages render
-themselves from it, and the homepage counters (books, columns, publications)
-are derived from the same data, so adding a column or an outlet there updates
-the whole site. `index.html` carries matching numbers as a no-JS fallback.
+themselves from it, and the counters (columns, outlets, states) are derived
+from the same data, so adding a column or an outlet there updates the whole
+site. The HTML carries matching numbers as a no-JS fallback.
+
+Columns display in the order they appear in `archiveItems`: put the newest
+first. The first one becomes the lead story on the front page, the next two
+sit beneath it.
 
 ## Contact Form Google Sheets Setup
 
