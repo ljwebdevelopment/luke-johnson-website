@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#fbfaf7">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin | Luke H. Johnson</title>
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    .admin { padding-block: clamp(28px, 5vw, 56px) 80px; }
+    .admin [hidden] { display: none !important; }
+    .admin-card { max-width: 460px; }
+    .admin-card .form { margin-top: 24px; }
+    .admin-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 20px; }
+    .tabs { display: flex; gap: 8px; }
+    .notice { margin-top: 18px; padding: 12px 16px; border-left: 4px solid var(--red); background: var(--paper-2); font-size: 1rem; }
+    .notice[data-tone="good"] { border-left-color: #1d6b38; }
+    .row-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
+    .row { display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--rule-soft); }
+    .row h3 { font-size: 1.15rem; font-weight: 600; line-height: 1.25; }
+    .row .meta { margin-top: 4px; }
+    .row-actions { display: flex; gap: 8px; }
+    .btn-small { min-height: 38px; padding: 8px 14px; font-size: 0.72rem; }
+    .editor { margin: 24px 0; padding: 24px; border: 1px solid var(--ink); background: #fff; }
+    .editor h2, .panel-head h2 { font-family: var(--display); font-size: 1.6rem; font-stretch: 72%; font-weight: 800; text-transform: uppercase; }
+    .panel-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; margin: 32px 0 16px; }
+    .hint { margin-top: 6px; font-size: 0.92rem; font-style: italic; color: var(--ink-3); }
+    .checks { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px 16px; max-height: 260px; overflow: auto; padding: 12px; border: 1px solid var(--ink); background: #fff; }
+    .checks label { display: flex; gap: 8px; align-items: flex-start; margin: 0; font-family: var(--text); font-size: 1rem; font-weight: 400; letter-spacing: 0; text-transform: none; }
+    .checks input { width: auto; min-height: 0; margin-top: 5px; }
+    .cover-preview { display: flex; gap: 12px; align-items: center; margin-top: 10px; }
+    .cover-preview img { width: 120px; height: 80px; object-fit: cover; border: 1px solid var(--ink); }
+    .field input[type="file"] { padding: 10px; background: #fff; }
+    .editor .btn-row { margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <a class="wordmark" href="index.html">lukehjohnson<span>.com</span></a>
+      <button class="menu-toggle" type="button" data-sign-out hidden>Sign out</button>
+    </div>
+  </header>
+
+  <main class="wrap admin">
+    <p class="kicker">Admin</p>
+    <h1 class="page-title">Manage<br>columns</h1>
+    <div class="double-rule" aria-hidden="true" style="margin-top:20px"></div>
+    <p class="notice" data-notice role="status" hidden></p>
+
+    <!-- Sign in -->
+    <section class="admin-card" data-view="sign-in" hidden>
+      <form class="form" data-sign-in-form>
+        <div class="field">
+          <label for="sign-in-email">Email</label>
+          <input id="sign-in-email" name="email" type="email" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label for="sign-in-password">Password</label>
+          <input id="sign-in-password" name="password" type="password" autocomplete="current-password" required>
+        </div>
+        <div class="btn-row">
+          <button class="btn" type="submit">Sign in</button>
+          <button class="btn btn-ghost" type="button" data-forgot>Forgot password</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Set or reset password (from the email link) -->
+    <section class="admin-card" data-view="set-password" hidden>
+      <form class="form" data-password-form>
+        <p>Choose a password for the admin page. Use at least 10 characters, and don't reuse a password from anywhere else.</p>
+        <div class="field">
+          <label for="new-password">New password</label>
+          <input id="new-password" name="password" type="password" autocomplete="new-password" minlength="10" required>
+        </div>
+        <div class="field">
+          <label for="confirm-password">Type it again</label>
+          <input id="confirm-password" name="confirm" type="password" autocomplete="new-password" minlength="10" required>
+        </div>
+        <div class="btn-row"><button class="btn" type="submit">Save password</button></div>
+      </form>
+    </section>
+
+    <!-- Signed in -->
+    <section data-view="dashboard" hidden>
+      <div class="admin-bar">
+        <div class="tabs filters" role="group" aria-label="What to edit">
+          <button class="filter" type="button" data-tab="pieces" aria-pressed="true">Columns</button>
+          <button class="filter" type="button" data-tab="outlets" aria-pressed="false">Outlets</button>
+        </div>
+        <span class="meta" data-signed-in-as></span>
+      </div>
+
+      <div class="notice" data-import-panel hidden>
+        <p>The database is empty. Copy the columns and outlets that are on the site today into it, so you can edit them here.</p>
+        <div class="btn-row" style="margin-top:12px"><button class="btn btn-small" type="button" data-import>Import current site data</button></div>
+      </div>
+
+      <!-- Columns -->
+      <div data-panel="pieces">
+        <div class="panel-head">
+          <h2>Columns &amp; features</h2>
+          <button class="btn btn-small" type="button" data-new-piece>Add a column</button>
+        </div>
+
+        <form class="editor form" data-piece-form hidden>
+          <h2 data-piece-form-title>Add a column</h2>
+          <div class="field">
+            <label for="piece-title">Headline</label>
+            <input id="piece-title" name="title" required>
+          </div>
+          <div class="form-pair">
+            <div class="field">
+              <label for="piece-type">Type</label>
+              <select id="piece-type" name="type">
+                <option>Column</option>
+                <option>Feature</option>
+                <option>Feature / Speaking</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="piece-date">Date published</label>
+              <input id="piece-date" name="published_on" type="date">
+              <p class="hint">Sets the order: newest shows first.</p>
+            </div>
+          </div>
+          <div class="field">
+            <label for="piece-date-label">Date text (optional)</label>
+            <input id="piece-date-label" name="date_label" placeholder="e.g. July 2026 or Oct. 23–25, 2026">
+            <p class="hint">Only if the date should read differently than the one above.</p>
+          </div>
+          <div class="field">
+            <label for="piece-description">Short description</label>
+            <textarea id="piece-description" name="description" rows="3"></textarea>
+          </div>
+          <div class="field">
+            <label>Where it ran</label>
+            <div class="checks" data-outlet-checks></div>
+            <p class="hint">The first outlet you tick is shown as the main one. Missing a paper? Add it under Outlets first.</p>
+          </div>
+          <div class="field">
+            <label for="piece-link">Link to the article (optional)</label>
+            <input id="piece-link" name="link" type="url" placeholder="https://">
+            <p class="hint">Not shown on the site; it helps search engines connect the column to you.</p>
+          </div>
+          <div class="field">
+            <label for="piece-badges">Topics (optional)</label>
+            <input id="piece-badges" name="badges" placeholder="Opinion, Education, Politics">
+            <p class="hint">Separate with commas. Used by the search box on the Writing page.</p>
+          </div>
+          <div class="field">
+            <label for="piece-cover">Cover photo (optional)</label>
+            <input id="piece-cover" name="cover" type="file" accept="image/jpeg,image/png,image/webp">
+            <div class="cover-preview" data-cover-preview hidden>
+              <img alt="Current cover photo">
+              <button class="btn btn-ghost btn-small" type="button" data-remove-cover>Remove photo</button>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn" type="submit">Save</button>
+            <button class="btn btn-ghost" type="button" data-cancel>Cancel</button>
+          </div>
+        </form>
+
+        <ul class="row-list" data-piece-list></ul>
+      </div>
+
+      <!-- Outlets -->
+      <div data-panel="outlets" hidden>
+        <div class="panel-head">
+          <h2>Outlets</h2>
+          <button class="btn btn-small" type="button" data-new-outlet>Add an outlet</button>
+        </div>
+
+        <form class="editor form" data-outlet-form hidden>
+          <h2 data-outlet-form-title>Add an outlet</h2>
+          <div class="field">
+            <label for="outlet-name">Name</label>
+            <input id="outlet-name" name="name" required placeholder="e.g. Tulsa World">
+          </div>
+          <div class="form-pair">
+            <div class="field">
+              <label for="outlet-city">City</label>
+              <input id="outlet-city" name="city" placeholder="Leave blank if national">
+            </div>
+            <div class="field">
+              <label for="outlet-state">State</label>
+              <input id="outlet-state" name="state" placeholder="e.g. Oklahoma">
+            </div>
+          </div>
+          <div class="form-pair">
+            <div class="field">
+              <label for="outlet-type">Type</label>
+              <select id="outlet-type" name="type">
+                <option>Newspaper</option>
+                <option>Media Outlet</option>
+                <option>Wire Service</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="outlet-scope">Reach</label>
+              <select id="outlet-scope" name="scope">
+                <option>Local</option>
+                <option selected>Regional</option>
+                <option>National</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="outlet-website">Website</label>
+            <input id="outlet-website" name="website" type="url" placeholder="https://">
+          </div>
+          <div class="btn-row">
+            <button class="btn" type="submit">Save</button>
+            <button class="btn btn-ghost" type="button" data-cancel>Cancel</button>
+          </div>
+        </form>
+
+        <ul class="row-list" data-outlet-list></ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- @supabase/supabase-js 2.119.0 (MIT), from npm -->
+  <script src="assets/vendor/supabase-js-2.119.0.js"></script>
+  <script src="assets/js/supabaseConfig.js"></script>
+  <script src="assets/js/archiveData.js"></script>
+  <script src="assets/js/render.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

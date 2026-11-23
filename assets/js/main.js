@@ -6,8 +6,8 @@
 (function () {
   "use strict";
 
-  const data = window.siteData || {};
   const render = window.siteRender;
+  const config = window.supabaseConfig || {};
 
   const qs = (selector, scope = document) => scope.querySelector(selector);
   const qsa = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
@@ -18,7 +18,7 @@
     });
   }
 
-  function renderBlocks() {
+  function renderBlocks(data) {
     if (!render) return;
     const values = render.metrics(data);
     qsa("[data-metric]").forEach((node) => {
@@ -37,6 +37,27 @@
     fill("[data-directory]", render.directory(data));
   }
 
+  // Columns and outlets from Supabase, merged into the bundled site data.
+  // Resolves to null when Supabase isn't configured or can't be reached, in
+  // which case the page keeps the HTML the build script wrote.
+  async function loadLiveData() {
+    if (!render || !config.url || !config.publishableKey) return null;
+    const headers = { apikey: config.publishableKey };
+    const get = (query) =>
+      fetch(`${config.url.replace(/\/$/, "")}/rest/v1/${query}`, { headers }).then((res) => {
+        if (!res.ok) throw new Error(`Supabase ${res.status}`);
+        return res.json();
+      });
+    try {
+      const [pieces, outlets] = await Promise.all([get(render.PIECES_QUERY), get(render.OUTLETS_QUERY)]);
+      if (!pieces.length) return null; // not imported yet
+      return render.fromDatabase(window.siteData || {}, pieces, outlets);
+    } catch (error) {
+      console.warn("Could not load live columns; showing the last published version.", error);
+      return null;
+    }
+  }
+
   function renderDate() {
     qsa("[data-today]").forEach((node) => {
       node.textContent = new Date().toLocaleDateString("en-US", {
@@ -53,7 +74,6 @@
   function setupWritingFilters() {
     const list = qs("[data-entries]");
     if (!list) return;
-    const entries = qsa(".entry", list);
     const search = qs("[data-search]");
     const filters = qsa("[data-filter]");
     const count = qs("[data-result-count]");
@@ -64,7 +84,7 @@
       const active = filters.find((btn) => btn.getAttribute("aria-pressed") === "true");
       const kind = active ? active.dataset.filter : "all";
       let shown = 0;
-      entries.forEach((entry) => {
+      qsa(".entry", list).forEach((entry) => {
         const visible =
           (kind === "all" || entry.dataset.kind === kind) &&
           (!query || (entry.dataset.search || "").includes(query));
@@ -88,6 +108,7 @@
       search.addEventListener("input", apply);
     }
     apply();
+    return apply;
   }
 
   // ---------- Chrome ----------
@@ -181,8 +202,19 @@
     setupNav();
     markCurrentPage();
     renderDate();
-    renderBlocks();
-    setupWritingFilters();
     setupContactForm();
+
+    if (config.url) {
+      // The HTML already holds the last build; swap in live data when it arrives.
+      const refilter = setupWritingFilters();
+      loadLiveData().then((live) => {
+        if (!live) return;
+        renderBlocks(live);
+        if (refilter) refilter();
+      });
+    } else {
+      renderBlocks(window.siteData || {});
+      setupWritingFilters();
+    }
   });
 })();

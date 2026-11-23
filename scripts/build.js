@@ -3,7 +3,10 @@
 //
 //   node scripts/build.js
 //
-// Run it after editing assets/js/archiveData.js. It needs no packages.
+// Columns and outlets come from Supabase (edited at /admin.html) when
+// assets/js/supabaseConfig.js is filled in, otherwise from
+// assets/js/archiveData.js. A GitHub Action runs this every hour, so edits
+// made in the admin page reach the HTML on their own. It needs no packages.
 // For every page it:
 //   1. writes the data-driven blocks (columns, books, outlets) into the HTML
 //      between <!-- build:NAME --> and <!-- /build:NAME --> markers, so the
@@ -26,7 +29,51 @@ const NJ_ID = SITE + "#northeastern-journal";
 const render = require(path.join(ROOT, "assets/js/render.js"));
 const sandbox = { window: {} };
 vm.runInNewContext(fs.readFileSync(path.join(ROOT, "assets/js/archiveData.js"), "utf8"), sandbox);
-const data = sandbox.window.siteData;
+vm.runInNewContext(fs.readFileSync(path.join(ROOT, "assets/js/supabaseConfig.js"), "utf8"), sandbox);
+const data = loadData(sandbox.window.siteData, sandbox.window.supabaseConfig || {});
+
+// Columns and outlets come from Supabase when it is configured and has been
+// filled in (through the admin page); otherwise from archiveData.js. The
+// fetch runs in a child process so the rest of this script stays synchronous.
+function loadData(base, config) {
+  if (!config.url || !config.publishableKey || process.argv.includes("--offline")) {
+    console.log("data: assets/js/archiveData.js");
+    return base;
+  }
+  const fetcher = `
+    const get = (q) => fetch(process.env.SB_URL + "/rest/v1/" + q, { headers: { apikey: process.env.SB_KEY } })
+      .then((r) => { if (r.status === 404) return []; if (!r.ok) throw new Error(q + ": HTTP " + r.status); return r.json(); });
+    Promise.all([get(process.env.SB_PIECES), get(process.env.SB_OUTLETS)])
+      .then((rows) => process.stdout.write(JSON.stringify(rows)))
+      .catch((e) => { console.error(e.message); process.exit(1); });`;
+  let pieces, outlets;
+  try {
+    const out = require("child_process").execFileSync(process.execPath, ["-e", fetcher], {
+      env: Object.assign({}, process.env, {
+        SB_URL: config.url.replace(/\/$/, ""),
+        SB_KEY: config.publishableKey,
+        SB_PIECES: render.PIECES_QUERY,
+        SB_OUTLETS: render.OUTLETS_QUERY
+      }),
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "pipe"],
+      timeout: 60000
+    });
+    [pieces, outlets] = JSON.parse(out);
+  } catch (error) {
+    // Refuse to publish stale content silently; run with --offline to build
+    // from archiveData.js on purpose.
+    console.error(`Could not read from Supabase (${String(error.stderr || error.message).trim()}).`);
+    console.error("Fix the connection, or run: node scripts/build.js --offline");
+    process.exit(1);
+  }
+  if (!pieces.length) {
+    console.log("data: Supabase not set up or empty yet, using assets/js/archiveData.js");
+    return base;
+  }
+  console.log(`data: Supabase (${pieces.length} pieces, ${outlets.length} outlets)`);
+  return render.fromDatabase(base, pieces, outlets);
+}
 
 const abs = (url) => (/^https?:/.test(url) ? url : SITE + url.replace(/^\//, ""));
 const strip = (html) => html.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;|&rsquo;/g, "'").replace(/\s+/g, " ").trim();
