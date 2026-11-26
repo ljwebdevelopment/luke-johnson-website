@@ -101,9 +101,9 @@ const person = {
   image: {
     "@type": "ImageObject",
     "@id": SITE + "#headshot",
-    url: SITE + "assets/images/luke-headshot.jpg",
+    url: SITE + "assets/images/luke-headshot-2026.jpg",
     width: 1000,
-    height: 1492,
+    height: 1250,
     caption: "Luke H. Johnson, author and columnist"
   },
   homeLocation: {
