@@ -98,6 +98,7 @@ const person = {
   disambiguatingDescription:
     "American teenage author and newspaper columnist from Tahlequah, Oklahoma. Not the British businessman and former Financial Times columnist Luke Johnson.",
   url: SITE,
+  email: "mailto:luke@lukehjohnson.com",
   image: {
     "@type": "ImageObject",
     "@id": SITE + "#headshot",
@@ -400,7 +401,7 @@ He is an American teenage writer. He is not the British businessman and former F
 - Outlets include the Tulsa World, the Northeastern Journal, the Tahlequah Daily Press, the CNHI News Service, and CNHI newspapers in Oklahoma, Texas, Indiana, Pennsylvania, New York, Illinois, and West Virginia
 - Topics: youth political advocacy, civic engagement, Oklahoma politics, education policy, media, technology and social media, Generation Z
 - Speaking: has questioned Oklahoma lawmakers at a state legislative forum on education
-- Contact: the contact form at https://lukehjohnson.com/contact.html
+- Contact: luke@lukehjohnson.com, or the contact form at https://lukehjohnson.com/contact.html
 
 ## Main pages
 
